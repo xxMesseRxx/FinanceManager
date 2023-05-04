@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace FinanceManager.Model;
 
-namespace FinanceManager.Model;
+using Microsoft.EntityFrameworkCore;
 
 public class FinanceManagerContext : DbContext
 {
