@@ -15,11 +15,12 @@ public class OperationService : IOperationService
 		_db = context;
 	}
 
-	public async Task AddOperationAsync(string type, bool isExpense)
+	public async Task AddOperationAsync(string type)
 	{
+		Operation newOperation = new Operation() { Type = type };
+
 		try
 		{
-			Operation newOperation = new Operation() { Type = type, IsExpense = isExpense };
 			_db.Operations.Add(newOperation);
 			_db.SaveChanges();
 		}
@@ -28,14 +29,13 @@ public class OperationService : IOperationService
 			throw new ArgumentException("Type isn't unique");
 		}
 	}
-	public async Task EditOperationAsync(int id, string type, bool isExpense)
+	public async Task EditOperationAsync(int id, string type)
 	{
 		Operation? operation = await _db.Operations.FindAsync(id);
 
 		if (operation is not null)
 		{
 			operation.Type = type;
-			operation.IsExpense = isExpense;
 
 			try
 			{
@@ -58,14 +58,7 @@ public class OperationService : IOperationService
 	}
 	public async Task<Operation> GetOperationAsync(int id)
 	{
-		Operation? operation = await _db.Operations.FindAsync(id);
-
-		if (operation is null)
-		{
-			throw new ArgumentException("Operation isn't exist");
-		}
-
-		return operation;
+		return await _db.Operations.FindAsync(id);
 	}
 	public async Task RemoveOperationAsync(int id)
 	{

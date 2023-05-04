@@ -4,6 +4,5 @@ public class Operation
 {
     public int Id { get; set; }
     public string Type { get; set; } = null!;
-    public bool IsExpense { get; set; }
     public List<FinancialOperation> FinancialOperations { get; set; }
 }

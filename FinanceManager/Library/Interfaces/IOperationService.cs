@@ -7,6 +7,6 @@ public interface IOperationService
 	public Task<List<Operation>> GetAllAsync();
 	public Task<Operation> GetOperationAsync(int id);
 	public Task RemoveOperationAsync(int id);
-	public Task EditOperationAsync(int id, string type, bool isExpense);
-	public Task AddOperationAsync(string type, bool isExpense);
+	public Task EditOperationAsync(int id, string type);
+	public Task AddOperationAsync(string type);
 }
