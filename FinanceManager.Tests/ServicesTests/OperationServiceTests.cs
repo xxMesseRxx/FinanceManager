@@ -2,12 +2,11 @@ namespace FinanceManager.Tests.ServicesTests;
 
 using FinanceManager.Model;
 using FinanceManager.Services;
-using Microsoft.EntityFrameworkCore;
 
 public class OperationServiceTests
 {
 	[Fact]
-	public void AddOperationAsync_TypeIsUnique_5OperationExpected()
+	public void AddOperationAsync_NameIsUnique_5OperationExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -15,7 +14,7 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			int expectedOperationCount = 5;
 
@@ -32,7 +31,7 @@ public class OperationServiceTests
 		}
 	}
 	[Fact]
-	public void AddOperationAsync_TypeIsNotUnique_AggregateExceptionExpected()
+	public void AddOperationAsync_NameIsNotUnique_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -40,7 +39,7 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 
 			//Act
@@ -61,14 +60,14 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
 			string expectedNewType = "Ўкола";
 
 			//Act
 			operationService.EditOperationAsync(operations[0].Id, expectedNewType).Wait();
-			string result = operationService.GetOperationAsync(operations[0].Id).Result.Type;
+			string result = operationService.GetOperationAsync(operations[0].Id).Result.Name;
 
 			//Assert
 			Assert.Equal(expectedNewType, result);
@@ -79,7 +78,7 @@ public class OperationServiceTests
 		}
 	}
 	[Fact]
-	public void EditOperationAsync_TypeIsNotUnique_AggregateExceptionExpected()
+	public void EditOperationAsync_NameIsNotUnique_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -87,13 +86,13 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
 
 			//Act
 			Assert.Throws<AggregateException>(() => operationService
-														.EditOperationAsync(operations[1].Id, operations[0].Type)
+														.EditOperationAsync(operations[1].Id, operations[0].Name)
 														.Wait());
 		}
 		finally
@@ -110,13 +109,13 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
 
 			//Act
 			Assert.Throws<AggregateException>(() => operationService
-														.EditOperationAsync(-6, "New Type")
+														.EditOperationAsync(-6, "New Name")
 														.Wait());
 		}
 		finally
@@ -134,7 +133,7 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			int expectedOperationCount = 4;
 
@@ -159,7 +158,7 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
 			int expectedOperationId = operations[0].Id;
@@ -185,7 +184,7 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 
 			//Act
@@ -201,7 +200,7 @@ public class OperationServiceTests
 	}
 
 	[Fact]
-	public void RemoveOperationAsync_OperationWithoutFinOper_3OperationExpected()
+	public void RemoveOperationAsync_OperationWithoutTransaction_3OperationExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -209,14 +208,14 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
-			Operation operationWithoutFinOper = operations.Find(o => o.FinancialOperations == null);
+			Operation operationWithoutTransaction = operations.Find(o => o.Transactions == null);
 			int expectedOperationCount = 3;
 
 			//Act
-			operationService.RemoveOperationAsync(operationWithoutFinOper.Id).Wait();
+			operationService.RemoveOperationAsync(operationWithoutTransaction.Id).Wait();
 			int result = operationService.GetAllAsync().Result.Count;
 
 			//Assert
@@ -228,7 +227,7 @@ public class OperationServiceTests
 		}
 	}
 	[Fact]
-	public void RemoveOperationAsync_OperationWithFinOper_AggregateExceptionExpected()
+	public void RemoveOperationAsync_OperationWithTransaction_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -236,7 +235,7 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
 
@@ -259,7 +258,7 @@ public class OperationServiceTests
 		{
 			//Arrange
 			dbCreator.CreateTestDB();
-			ServicesGreator servicesGreator = new ServicesGreator();
+			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
 

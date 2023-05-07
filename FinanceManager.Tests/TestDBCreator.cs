@@ -2,15 +2,20 @@
 
 using FinanceManager.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 public class TestDBCreator : IDisposable
 {
+	public string DbName { get; private set; }
+
 	private FinanceManagerContext? _db;
 
 	public void CreateTestDB()
 	{
+		DbName = Guid.NewGuid().ToString();
+
 		var optionsBuilder = new DbContextOptionsBuilder<FinanceManagerContext>();
-		optionsBuilder.UseSqlServer("Server=localhost;Database=TestFinance;Trusted_Connection=True;Encrypt=False;");
+		optionsBuilder.UseSqlServer($"Server=localhost;Database={DbName};Trusted_Connection=True;Encrypt=False;");
 
 		_db = new FinanceManagerContext(optionsBuilder.Options);
 
@@ -28,34 +33,34 @@ public class TestDBCreator : IDisposable
 		_db.Operations.AddRange(operations);
 		_db.SaveChanges();
 
-		var finOperations = CreateTestFinOper(operations);
-		_db.FinancialOperations.AddRange(finOperations);
+		var transactions = CreateTestTransactions(operations);
+		_db.Transactions.AddRange(transactions);
 		_db.SaveChanges();
 	}
 	private List<Operation> CreateTestOperations()
 	{
 		List<Operation> operations = new List<Operation>()
 		{
-			new Operation() { Type = "Оплата квартиры" },
-			new Operation() { Type = "Оплата курсов" },
-			new Operation() { Type = "Зарплата" },
-			new Operation() { Type = "Долг" }
+			new Operation() { Name = "Оплата квартиры" },
+			new Operation() { Name = "Оплата курсов" },
+			new Operation() { Name = "Зарплата" },
+			new Operation() { Name = "Долг" }
 		};
 
 		return operations;
 	}
-	private List<FinancialOperation> CreateTestFinOper(List<Operation> operations)
+	private List<Transaction> CreateTestTransactions(List<Operation> operations)
 	{
-		List<FinancialOperation> finOperations = new List<FinancialOperation>()
+		List<Transaction> transaction = new List<Transaction>()
 		{
-			new FinancialOperation() { Sum = -2000000, DateTime = DateTime.Now, OperationTypeId = operations[0].Id },
-			new FinancialOperation() { Sum = -1000000, DateTime = DateTime.Now, OperationTypeId = operations[1].Id, Discription = "English" },
-			new FinancialOperation() { Sum = -500000, DateTime = DateTime.Now, OperationTypeId = operations[1].Id, Discription = "Math" },
-			new FinancialOperation() { Sum = 2000000, DateTime = DateTime.Now, OperationTypeId = operations[2].Id },
-			new FinancialOperation() { Sum = 2000000, DateTime = DateTime.Now, OperationTypeId = operations[2].Id }
+			new Transaction() { Sum = -2000000, DateTime = DateTime.Now, OperationId = operations[0].Id },
+			new Transaction() { Sum = -1000000, DateTime = DateTime.Now, OperationId = operations[1].Id, Discription = "English" },
+			new Transaction() { Sum = -500000, DateTime = DateTime.Now, OperationId = operations[1].Id, Discription = "Math" },
+			new Transaction() { Sum = 2000000, DateTime = DateTime.Now, OperationId = operations[2].Id },
+			new Transaction() { Sum = 2000000, DateTime = DateTime.Now, OperationId = operations[2].Id }
 		};
 
-		return finOperations;
+		return transaction;
 	}
 }
 

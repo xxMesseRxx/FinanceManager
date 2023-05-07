@@ -7,11 +7,14 @@ using Microsoft.EntityFrameworkCore;
 public class ServicesGreator
 {
 	private FinanceManagerContext _db;
+	private string _dbName;
 
-	public ServicesGreator()
+	public ServicesGreator(string dbName)
 	{
+		_dbName = dbName;
+
 		var optionsBuilder = new DbContextOptionsBuilder<FinanceManagerContext>();
-		optionsBuilder.UseSqlServer("Server=localhost;Database=TestFinance;Trusted_Connection=True;Encrypt=False;");
+		optionsBuilder.UseSqlServer($"Server=localhost;Database={_dbName};Trusted_Connection=True;Encrypt=False;");
 
 		_db = new FinanceManagerContext(optionsBuilder.Options);
 	}
@@ -20,8 +23,8 @@ public class ServicesGreator
 	{
 		return new OperationService(_db);
 	}
-	public FinancialOperationService GetFinOperService()
+	public TransactionService GetTransactionService()
 	{
-		return new FinancialOperationService(_db);
+		return new TransactionService(_db);
 	}
 }

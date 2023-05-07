@@ -15,9 +15,9 @@ public class OperationService : IOperationService
 		_db = context;
 	}
 
-	public async Task AddOperationAsync(string type)
+	public async Task AddOperationAsync(string name)
 	{
-		Operation newOperation = new Operation() { Type = type };
+		Operation newOperation = new Operation() { Name = name };
 
 		try
 		{
@@ -26,16 +26,16 @@ public class OperationService : IOperationService
 		}
 		catch (DbUpdateException)
 		{
-			throw new ArgumentException("Type isn't unique");
+			throw new ArgumentException("Name isn't unique");
 		}
 	}
-	public async Task EditOperationAsync(int id, string type)
+	public async Task EditOperationAsync(int id, string name)
 	{
 		Operation? operation = await _db.Operations.FindAsync(id);
 
 		if (operation is not null)
 		{
-			operation.Type = type;
+			operation.Name = name;
 
 			try
 			{
@@ -44,7 +44,7 @@ public class OperationService : IOperationService
 			}
 			catch (DbUpdateException)
 			{
-				throw new ArgumentException("Type isn't unique");
+				throw new ArgumentException("Name isn't unique");
 			}
 		}
 		else
@@ -73,7 +73,7 @@ public class OperationService : IOperationService
 			}
 			catch (DbUpdateException)
 			{
-				throw new ArgumentException("Operation type cannot be deleted when it has got financial operations");
+				throw new ArgumentException("Operation cannot be deleted when it has got financial operations");
 			}
 		}
 		else
