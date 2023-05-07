@@ -28,7 +28,7 @@ public class TransactionService : ITransactionService
 		}
 		catch (DbUpdateException)
 		{
-			throw new ArgumentException();
+			throw new ArgumentException("Operation isn't exist");
 		}
 	}
 	public async Task EditTransactionAsync(int id, int sum, string discription, DateTime dateTime, int operationId)
@@ -83,5 +83,6 @@ public class TransactionService : ITransactionService
 		}
 
 		_db.Transactions.Remove(transaction);
+		_db.SaveChanges();
 	}
 }

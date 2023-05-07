@@ -6,7 +6,7 @@ using FinanceManager.Services;
 public class OperationServiceTests
 {
 	[Fact]
-	public void AddOperationAsync_NameIsUnique_5OperationExpected()
+	public void AddOperationAsync_NameIsUnique_5OperationsExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -125,7 +125,7 @@ public class OperationServiceTests
 	}
 
 	[Fact]
-	public void GetAllAsync_Get_4OperationExpected()
+	public void GetAllAsync_Get_4OperationsExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -200,7 +200,7 @@ public class OperationServiceTests
 	}
 
 	[Fact]
-	public void RemoveOperationAsync_OperationWithoutTransaction_3OperationExpected()
+	public void RemoveOperationAsync_OperationWithoutTransaction_3OperationsExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
