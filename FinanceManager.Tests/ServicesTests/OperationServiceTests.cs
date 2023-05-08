@@ -175,7 +175,33 @@ public class OperationServiceTests
 			dbCreator.Dispose();
 		}
 	}
-	[Fact]
+    [Fact]
+    public void GetOperationAsync_CorName_RequiredOperationExpected()
+    {
+        var dbCreator = new TestDBCreator();
+
+        try
+        {
+            //Arrange
+            dbCreator.CreateTestDB();
+            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
+            OperationService operationService = servicesGreator.GetOperationService();
+            List<Operation> operations = operationService.GetAllAsync().Result;
+            string expectedOperationName = operations[0].Name;
+
+            //Act
+            var requiredOperation = operationService.GetOperationAsync(expectedOperationName).Result;
+            string result = requiredOperation.Name;
+
+            //Assert
+            Assert.Equal(expectedOperationName, result);
+        }
+        finally
+        {
+            dbCreator.Dispose();
+        }
+    }
+    [Fact]
 	public void GetOperationAsync_IncorId_NullExpected()
 	{
 		var dbCreator = new TestDBCreator();
@@ -198,8 +224,31 @@ public class OperationServiceTests
 			dbCreator.Dispose();
 		}
 	}
+    [Fact]
+    public void GetOperationAsync_IncorName_NullExpected()
+    {
+        var dbCreator = new TestDBCreator();
 
-	[Fact]
+        try
+        {
+            //Arrange
+            dbCreator.CreateTestDB();
+            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
+            OperationService operationService = servicesGreator.GetOperationService();
+
+            //Act
+            var result = operationService.GetOperationAsync("blabla").Result;
+
+            //Assert
+            Assert.Null(result);
+        }
+        finally
+        {
+            dbCreator.Dispose();
+        }
+    }
+
+    [Fact]
 	public void RemoveOperationAsync_OperationWithoutTransaction_3OperationsExpected()
 	{
 		var dbCreator = new TestDBCreator();

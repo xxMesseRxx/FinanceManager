@@ -60,7 +60,11 @@ public class OperationService : IOperationService
 	{
 		return await _db.Operations.FindAsync(id);
 	}
-	public async Task RemoveOperationAsync(int id)
+    public async Task<Operation> GetOperationAsync(string name)
+    {
+        return await _db.Operations.FirstOrDefaultAsync(o => o.Name == name);
+    }
+    public async Task RemoveOperationAsync(int id)
 	{
 		Operation? operation = await _db.Operations.FindAsync(id);
 

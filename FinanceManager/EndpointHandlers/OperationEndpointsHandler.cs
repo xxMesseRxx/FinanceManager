@@ -23,4 +23,22 @@ public static class OperationEndpointsHandler
 
         return Results.Json(operation);
     }
+    public static async Task<IResult> AddAsync(IOperationService operationService,
+                                               Operation operation)
+    {
+        try
+        {
+            await operationService.AddOperationAsync(operation.Name);
+            var addedOperation = await operationService.GetOperationAsync(operation.Name);
+
+            return Results.Json(addedOperation);
+        }
+        catch (ArgumentException)
+        {
+            return Results.ValidationProblem(new Dictionary<string, string[]>
+            {
+                {"Validation error", new string[] { "Name is exist" } }
+            });
+        }
+    }
 }

@@ -18,6 +18,7 @@ app.MapGet("/", () => "Hello World!");
 
 app.MapGet("/operations", OperationEndpointsHandler.GetAllAsync);
 app.MapGet("/operations/{id:int}", OperationEndpointsHandler.GetOperationAsync);
+app.MapPost("/operations", OperationEndpointsHandler.AddAsync);
 
 app.MapGet("/transactions", TransactionEndpointsHandler.GetAllAsync);
 
