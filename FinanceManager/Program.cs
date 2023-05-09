@@ -16,9 +16,11 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
+app.MapPost("/operations", OperationEndpointsHandler.AddAsync);
+app.MapPut("/operations", OperationEndpointsHandler.EditAsync);
 app.MapGet("/operations", OperationEndpointsHandler.GetAllAsync);
 app.MapGet("/operations/{id:int}", OperationEndpointsHandler.GetOperationAsync);
-app.MapPost("/operations", OperationEndpointsHandler.AddAsync);
+app.MapDelete("/operations/{id:int}", OperationEndpointsHandler.RemoveAsync);
 
 app.MapGet("/transactions", TransactionEndpointsHandler.GetAllAsync);
 
