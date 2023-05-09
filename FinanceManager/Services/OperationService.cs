@@ -36,7 +36,12 @@ public class OperationService : IOperationService
 	}
 	public async Task EditOperationAsync(int id, string name)
 	{
-		Operation? operation = await _db.Operations.FindAsync(id);
+        if (string.IsNullOrEmpty(name))
+        {
+            throw new ArgumentNullException(nameof(name));
+        }
+
+        Operation? operation = await _db.Operations.FindAsync(id);
 
 		if (operation is not null)
 		{
@@ -49,7 +54,7 @@ public class OperationService : IOperationService
 			}
 			catch (DbUpdateException)
 			{
-				throw new ArgumentException("Name isn't unique or empty");
+				throw new ArgumentException("Name isn't unique");
 			}
 		}
 		else

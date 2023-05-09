@@ -140,7 +140,53 @@ public class OperationServiceTests
 			dbCreator.Dispose();
 		}
 	}
-	[Fact]
+    [Fact]
+    public void EditOperationAsync_NameIsNull_AggregateExceptionExpected()
+    {
+        var dbCreator = new TestDBCreator();
+
+        try
+        {
+            //Arrange
+            dbCreator.CreateTestDB();
+            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
+            OperationService operationService = servicesGreator.GetOperationService();
+            List<Operation> operations = operationService.GetAllAsync().Result;
+
+            //Act
+            Assert.Throws<AggregateException>(() => operationService
+                                                        .EditOperationAsync(operations[1].Id, null)
+                                                        .Wait());
+        }
+        finally
+        {
+            dbCreator.Dispose();
+        }
+    }
+    [Fact]
+    public void EditOperationAsync_NameIsEmpty_AggregateExceptionExpected()
+    {
+        var dbCreator = new TestDBCreator();
+
+        try
+        {
+            //Arrange
+            dbCreator.CreateTestDB();
+            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
+            OperationService operationService = servicesGreator.GetOperationService();
+            List<Operation> operations = operationService.GetAllAsync().Result;
+
+            //Act
+            Assert.Throws<AggregateException>(() => operationService
+                                                        .EditOperationAsync(operations[1].Id, "")
+                                                        .Wait());
+        }
+        finally
+        {
+            dbCreator.Dispose();
+        }
+    }
+    [Fact]
 	public void EditOperationAsync_IdIsNotExist_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
