@@ -50,8 +50,48 @@ public class OperationServiceTests
 			dbCreator.Dispose();
 		}
 	}
+    [Fact]
+    public void AddOperationAsync_NullArg_AggregateExceptionExpected()
+    {
+        var dbCreator = new TestDBCreator();
 
-	[Fact]
+        try
+        {
+            //Arrange
+            dbCreator.CreateTestDB();
+            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
+            OperationService operationService = servicesGreator.GetOperationService();
+
+            //Act
+            Assert.Throws<AggregateException>(() => operationService.AddOperationAsync(null).Wait());
+        }
+        finally
+        {
+            dbCreator.Dispose();
+        }
+    }
+    [Fact]
+    public void AddOperationAsync_EmptyArg_AggregateExceptionExpected()
+    {
+        var dbCreator = new TestDBCreator();
+
+        try
+        {
+            //Arrange
+            dbCreator.CreateTestDB();
+            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
+            OperationService operationService = servicesGreator.GetOperationService();
+
+            //Act
+            Assert.Throws<AggregateException>(() => operationService.AddOperationAsync("").Wait());
+        }
+        finally
+        {
+            dbCreator.Dispose();
+        }
+    }
+
+    [Fact]
 	public void EditOperationAsync_CorArgs_ChangedOperationExpected()
 	{
 		var dbCreator = new TestDBCreator();

@@ -17,8 +17,13 @@ public class OperationService : IOperationService
 
 	public async Task AddOperationAsync(string name)
 	{
-		Operation newOperation = new Operation() { Name = name };
+		if (string.IsNullOrEmpty(name))
+		{
+			throw new ArgumentNullException(nameof(name));
+		}
 
+		Operation newOperation = new Operation() { Name = name };
+		 
 		try
 		{
 			_db.Operations.Add(newOperation);
@@ -44,7 +49,7 @@ public class OperationService : IOperationService
 			}
 			catch (DbUpdateException)
 			{
-				throw new ArgumentException("Name isn't unique");
+				throw new ArgumentException("Name isn't unique or empty");
 			}
 		}
 		else
