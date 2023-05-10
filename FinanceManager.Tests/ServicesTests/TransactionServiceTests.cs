@@ -213,7 +213,58 @@ public class TransactionServiceTests
 		}
 	}
 
-	[Fact]
+    [Fact]
+    public void GetTransactionsByDateAsync_CorDate_2TransactionsExpected()
+    {
+        var dbCreator = new TestDBCreator();
+
+        try
+        {
+            //Arrange
+            dbCreator.CreateTestDB();
+            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
+            TransactionService transactionService = servicesGreator.GetTransactionService();
+			DateOnly date = new DateOnly(2012, 12, 12);
+			int expected = 2;
+
+			//Act
+            int result = transactionService.GetTransactionsByDateAsync(date).Result.Count;
+
+			//Assert
+			Assert.Equal(expected, result);
+        }
+        finally
+        {
+            dbCreator.Dispose();
+        }
+    }
+    [Fact]
+    public void GetTransactionsByDateAsync_IncorDate_EmptyListExpected()
+    {
+        var dbCreator = new TestDBCreator();
+
+        try
+        {
+            //Arrange
+            dbCreator.CreateTestDB();
+            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
+            TransactionService transactionService = servicesGreator.GetTransactionService();
+            DateOnly date = new DateOnly(1900, 12, 12);
+            int expected = 0;
+
+            //Act
+            int result = transactionService.GetTransactionsByDateAsync(date).Result.Count;
+
+            //Assert
+            Assert.Equal(expected, result);
+        }
+        finally
+        {
+            dbCreator.Dispose();
+        }
+    }
+
+    [Fact]
 	public void GetTransactionWithOperIdAsync_CorId_1TransactionExpected()
 	{
 		var dbCreator = new TestDBCreator();

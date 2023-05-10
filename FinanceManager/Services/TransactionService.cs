@@ -65,7 +65,16 @@ public class TransactionService : ITransactionService
 	{
 		return await _db.Transactions.FindAsync(id);
 	}
-	public async Task<List<Transaction>> GetTransactionWithOperIdAsync(int operationId)
+    public async Task<List<Transaction>> GetTransactionsByDateAsync(DateOnly date)
+    {
+		DateTime dateTime = date.ToDateTime(TimeOnly.MinValue);
+
+		return await _db.Transactions
+						.Where(t => t.DateTime.Date == dateTime.Date)
+						.Include(t => t.Operation)
+						.ToListAsync();
+    }
+    public async Task<List<Transaction>> GetTransactionWithOperIdAsync(int operationId)
 	{
 		List<Transaction> transaction = await _db.Transactions
 												.Where(t => t.OperationId == operationId)
