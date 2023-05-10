@@ -22,8 +22,10 @@ app.MapGet("/operations", OperationEndpointsHandler.GetAllAsync);
 app.MapGet("/operations/{id:int}", OperationEndpointsHandler.GetOperationAsync);
 app.MapDelete("/operations/{id:int}", OperationEndpointsHandler.RemoveAsync);
 
-app.MapGet("/transactions", TransactionEndpointsHandler.GetAllAsync);
 app.MapPost("/transactions", TransactionEndpointsHandler.AddAsync);
+app.MapPut("/transactions", TransactionEndpointsHandler.EditAsync);
+app.MapGet("/transactions", TransactionEndpointsHandler.GetAllAsync);
 app.MapGet("/transactions/{id:int}", TransactionEndpointsHandler.GetTransactionAsync);
+app.MapDelete("/transactions/{id:int}", TransactionEndpointsHandler.RemoveAsync);
 
 app.Run();

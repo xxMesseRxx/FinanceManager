@@ -49,7 +49,7 @@ public class TransactionService : ITransactionService
 			}
 			catch (DbUpdateException)
 			{
-				throw new ArgumentException();
+				throw new ArgumentException("Operation Id isn't exist");
 			}
 		}
 		else

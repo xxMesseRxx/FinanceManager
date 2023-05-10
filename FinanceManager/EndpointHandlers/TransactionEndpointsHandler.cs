@@ -44,4 +44,36 @@ public static class TransactionEndpointsHandler
             return Results.BadRequest(new { message = ex.Message });
         }
     }
+    public static async Task<IResult> EditAsync(ITransactionService transactionService,
+                                                Transaction transaction)
+    {
+        try
+        {
+            await transactionService.EditTransactionAsync(transaction.Id, transaction.Sum,
+                                                          transaction.Discription, transaction.DateTime,
+                                                          transaction.OperationId);
+            var editedTransaction = await transactionService.GetTransactionAsync(transaction.Id);
+
+            return Results.Json(editedTransaction);
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(new { message = ex.Message });
+        }
+    }
+    public static async Task<IResult> RemoveAsync(ITransactionService transactionService,
+                                                  int id)
+    {
+        try
+        {
+            var removedTransaction = await transactionService.GetTransactionAsync(id);
+            await transactionService.RemoveTransactionAsync(id);
+
+            return Results.Json(removedTransaction);
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(new { message = ex.Message });
+        }
+    }
 }
