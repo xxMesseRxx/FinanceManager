@@ -32,7 +32,7 @@ namespace FinanceManager.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Sum = table.Column<int>(type: "int", nullable: false),
                     Discription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     OperationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

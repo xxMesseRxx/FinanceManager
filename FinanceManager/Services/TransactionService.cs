@@ -28,7 +28,7 @@ public class TransactionService : ITransactionService
 		}
 		catch (DbUpdateException)
 		{
-			throw new ArgumentException("Operation isn't exist");
+			throw new ArgumentException("OperationId isn't exist");
 		}
 	}
 	public async Task EditTransactionAsync(int id, int sum, string discription, DateTime dateTime, int operationId)

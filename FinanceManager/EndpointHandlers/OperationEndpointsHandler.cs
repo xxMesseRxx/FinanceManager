@@ -18,7 +18,7 @@ public static class OperationEndpointsHandler
 
         if (operation is null)
         {
-            return Results.NotFound(new { message = "Операция не найдена" });
+            return Results.NotFound(new { message = "Operation not found" });
         }
 
         return Results.Json(operation);
@@ -28,32 +28,22 @@ public static class OperationEndpointsHandler
     {
         if (operation.Id != 0)
         {
-            return Results.ValidationProblem(new Dictionary<string, string[]>
-            {
-                {"Validation error", new string[] { $"Id must be empty" } }
-            });
+            return Results.BadRequest(new { message = "Id must be empty" });
         }
         else if (operation.Transactions is not null)
         {
-            return Results.ValidationProblem(new Dictionary<string, string[]>
-            {
-                {"Validation error", new string[] { $"Transactions must be empty" } }
-            });
+            return Results.BadRequest(new { message = "Transactions must be empty" });
         }
 
         try
         {
             await operationService.AddOperationAsync(operation.Name);
-            var addedOperation = await operationService.GetOperationAsync(operation.Name);
 
-            return Results.Json(addedOperation);
+            return Results.Ok();
         }
         catch (ArgumentException ex)
         {
-            return Results.ValidationProblem(new Dictionary<string, string[]>
-            {
-                {"Validation error", new string[] { ex.Message } }
-            });
+            return Results.BadRequest(new { message = ex.Message });
         }
     }
     public static async Task<IResult> EditAsync(IOperationService operationService,
@@ -68,10 +58,7 @@ public static class OperationEndpointsHandler
         }
         catch (ArgumentException ex)
         {
-            return Results.ValidationProblem(new Dictionary<string, string[]>
-            {
-                {"Validation error", new string[] { ex.Message } }
-            });
+            return Results.BadRequest(new { message = ex.Message });
         }
     }
     public static async Task<IResult> RemoveAsync(IOperationService operationService,
@@ -86,10 +73,7 @@ public static class OperationEndpointsHandler
         }
         catch (ArgumentException ex)
         {
-            return Results.ValidationProblem(new Dictionary<string, string[]>
-            {
-                {"Validation error", new string[] { ex.Message } }
-            });
+            return Results.BadRequest(new { message = ex.Message });
         }
     }
 }
