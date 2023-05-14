@@ -74,6 +74,17 @@ public class TransactionService : ITransactionService
 						.Include(t => t.Operation)
 						.ToListAsync();
     }
+    public async Task<List<Transaction>> GetTransactionsByDateAsync(DateOnly startDate, DateOnly endDate)
+    {
+        DateTime startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
+        DateTime endDateTime = endDate.ToDateTime(TimeOnly.MinValue);
+
+        return await _db.Transactions
+                        .Where(t => t.DateTime.Date >= startDateTime.Date &&
+									t.DateTime.Date <= endDateTime.Date)
+                        .Include(t => t.Operation)
+                        .ToListAsync();
+    }
     public async Task<List<Transaction>> GetTransactionWithOperIdAsync(int operationId)
 	{
 		List<Transaction> transaction = await _db.Transactions

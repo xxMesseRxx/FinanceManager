@@ -263,6 +263,64 @@ public class TransactionServiceTests
             dbCreator.Dispose();
         }
     }
+    [Fact]
+    public void GetTransactionsByDateAsync_CorDates_3TransactionsExpected()
+    {
+        var dbCreator = new TestDBCreator();
+
+        try
+        {
+            //Arrange
+            dbCreator.CreateTestDB();
+            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
+            TransactionService transactionService = servicesGreator.GetTransactionService();
+            DateOnly startDate = new DateOnly(2016, 01, 08);
+            DateOnly endDate = new DateOnly(2020, 12, 10);
+            int expected = 3;
+
+            //Act
+            int result = transactionService
+							.GetTransactionsByDateAsync(startDate, endDate)
+							.Result
+							.Count;
+
+            //Assert
+            Assert.Equal(expected, result);
+        }
+        finally
+        {
+            dbCreator.Dispose();
+        }
+    }
+    [Fact]
+    public void GetTransactionsByDateAsync_IncorDates_EmptyListExpected()
+    {
+        var dbCreator = new TestDBCreator();
+
+        try
+        {
+            //Arrange
+            dbCreator.CreateTestDB();
+            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
+            TransactionService transactionService = servicesGreator.GetTransactionService();
+            DateOnly startDate = new DateOnly(2002, 01, 08);
+            DateOnly endDate = new DateOnly(2010, 12, 10);
+            int expected = 0;
+
+            //Act
+            int result = transactionService
+                            .GetTransactionsByDateAsync(startDate, endDate)
+                            .Result
+                            .Count;
+
+            //Assert
+            Assert.Equal(expected, result);
+        }
+        finally
+        {
+            dbCreator.Dispose();
+        }
+    }
 
     [Fact]
 	public void GetTransactionWithOperIdAsync_CorId_1TransactionExpected()

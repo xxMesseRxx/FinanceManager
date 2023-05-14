@@ -53,9 +53,9 @@ public class TestDBCreator : IDisposable
 	{
 		List<Transaction> transaction = new List<Transaction>()
 		{
-			new Transaction() { Sum = -2000000, DateTime = DateTime.Now, OperationId = operations[0].Id },
-			new Transaction() { Sum = -1000000, DateTime = DateTime.Now, OperationId = operations[1].Id, Discription = "English" },
-			new Transaction() { Sum = -500000, DateTime = DateTime.Now, OperationId = operations[1].Id, Discription = "Math" },
+			new Transaction() { Sum = -2000000, DateTime = new DateTime(2019, 09, 26), OperationId = operations[0].Id },
+			new Transaction() { Sum = -1000000, DateTime = new DateTime(2018, 06, 15), OperationId = operations[1].Id, Discription = "English" },
+			new Transaction() { Sum = -500000, DateTime = new DateTime(2016, 01, 12), OperationId = operations[1].Id, Discription = "Math" },
 			new Transaction() { Sum = 2000000, DateTime = new DateTime(2012, 12, 12), OperationId = operations[2].Id },
 			new Transaction() { Sum = 2000000, DateTime = new DateTime(2012, 12, 12), OperationId = operations[2].Id }
 		};
