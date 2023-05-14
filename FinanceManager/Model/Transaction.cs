@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace FinanceManager.Model;
 
-namespace FinanceManager.Model;
+using System.ComponentModel.DataAnnotations;
 
 public class Transaction
 {
