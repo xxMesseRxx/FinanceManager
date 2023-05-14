@@ -11,6 +11,7 @@ string DbConnection = builder.Configuration.GetConnectionString("DefaultConnecti
 builder.Services.AddDbContext<FinanceManagerContext>(options => options.UseSqlServer(DbConnection));
 builder.Services.AddTransient<IOperationService, OperationService>();
 builder.Services.AddTransient<ITransactionService, TransactionService>();
+builder.Services.AddTransient<IReportService, ReportService>();
 
 var app = builder.Build();
 
@@ -27,5 +28,7 @@ app.MapPut("/transactions", TransactionEndpointsHandler.EditAsync);
 app.MapGet("/transactions", TransactionEndpointsHandler.GetAllAsync);
 app.MapGet("/transactions/{id:int}", TransactionEndpointsHandler.GetTransactionAsync);
 app.MapDelete("/transactions/{id:int}", TransactionEndpointsHandler.RemoveAsync);
+
+app.MapGet("/dailyReport/{date}", ReportEndpointsHandler.GetDailyReportAsync);
 
 app.Run();
