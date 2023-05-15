@@ -12,4 +12,11 @@ public static class ReportEndpointsHandler
 
         return Results.Json(dailyReport);
     }
+    public static async Task<IResult> GetPeriodReportAsync(IReportService reportService,
+                                                           DateOnly startDate, DateOnly endDate)
+    {
+        PeriodReport periodReport = await reportService.GetPeriodReportAsync(startDate, endDate);
+
+        return Results.Json(periodReport);
+    }
 }

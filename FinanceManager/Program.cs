@@ -15,7 +15,7 @@ builder.Services.AddTransient<IReportService, ReportService>();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => "Welcome page");
 
 app.MapPost("/operations", OperationEndpointsHandler.AddAsync);
 app.MapPut("/operations", OperationEndpointsHandler.EditAsync);
@@ -30,5 +30,6 @@ app.MapGet("/transactions/{id:int}", TransactionEndpointsHandler.GetTransactionA
 app.MapDelete("/transactions/{id:int}", TransactionEndpointsHandler.RemoveAsync);
 
 app.MapGet("/dailyReport/{date}", ReportEndpointsHandler.GetDailyReportAsync);
+app.MapGet("/dailyReport/{startDate}-{endDate}", ReportEndpointsHandler.GetPeriodReportAsync);
 
 app.Run();
