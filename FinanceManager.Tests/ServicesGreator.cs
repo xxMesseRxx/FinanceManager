@@ -27,4 +27,8 @@ public class ServicesGreator
 	{
 		return new TransactionService(_db);
 	}
+    public ReportService GetReportService()
+    {
+        return new ReportService(GetTransactionService());
+    }
 }
