@@ -30,10 +30,6 @@ public static class OperationEndpointsHandler
         {
             return Results.BadRequest(new { message = "Id must be empty" });
         }
-        else if (operation.Transactions is not null)
-        {
-            return Results.BadRequest(new { message = "Transactions must be empty" });
-        }
 
         try
         {
