@@ -2,6 +2,7 @@ namespace FinanceManager.Tests.ServicesTests;
 
 using FinanceManager.Model;
 using FinanceManager.Services;
+using FinanceManager.DAL.DTO.Operation;
 
 public class OperationServiceTests
 {
@@ -16,10 +17,11 @@ public class OperationServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
+			OperationCreateDto operationCreateDto = new OperationCreateDto() { Name = "Продукты" };
 			int expectedOperationCount = 5;
 
 			//Act
-			operationService.AddOperationAsync("Продукты").Wait();
+			operationService.AddOperationAsync(operationCreateDto).Wait();
 			int result = operationService.GetAllAsync().Result.Count;
 
 			//Assert
@@ -41,9 +43,10 @@ public class OperationServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
+			OperationCreateDto operationCreateDto = new OperationCreateDto() { Name = "Зарплата" };
 
-			//Act
-			Assert.Throws<AggregateException>(() => operationService.AddOperationAsync("Зарплата").Wait());
+            //Act
+            Assert.Throws<AggregateException>(() => operationService.AddOperationAsync(operationCreateDto).Wait());
 		}
 		finally
 		{
@@ -71,7 +74,7 @@ public class OperationServiceTests
         }
     }
     [Fact]
-    public void AddOperationAsync_EmptyArg_AggregateExceptionExpected()
+    public void AddOperationAsync_EmptyName_AggregateExceptionExpected()
     {
         var dbCreator = new TestDBCreator();
 
@@ -81,9 +84,10 @@ public class OperationServiceTests
             dbCreator.CreateTestDB();
             ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
             OperationService operationService = servicesGreator.GetOperationService();
+			OperationCreateDto operationCreateDto = new OperationCreateDto() { Name = "" };
 
             //Act
-            Assert.Throws<AggregateException>(() => operationService.AddOperationAsync("").Wait());
+            Assert.Throws<AggregateException>(() => operationService.AddOperationAsync(operationCreateDto).Wait());
         }
         finally
         {
@@ -103,14 +107,19 @@ public class OperationServiceTests
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
-			string expectedNewType = "Школа";
+            string expectedNewName = "Школа";
+			OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
+			{
+				Id = operations[0].Id,
+				Name = expectedNewName
+			};
 
 			//Act
-			operationService.EditOperationAsync(operations[0].Id, expectedNewType).Wait();
+			operationService.EditOperationAsync(operationUpdateDto).Wait();
 			string result = operationService.GetOperationAsync(operations[0].Id).Result.Name;
 
 			//Assert
-			Assert.Equal(expectedNewType, result);
+			Assert.Equal(expectedNewName, result);
 		}
 		finally
 		{
@@ -129,10 +138,15 @@ public class OperationServiceTests
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
+            OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
+            {
+                Id = operations[1].Id,
+                Name = operations[0].Name
+            };
 
-			//Act
-			Assert.Throws<AggregateException>(() => operationService
-														.EditOperationAsync(operations[1].Id, operations[0].Name)
+            //Act
+            Assert.Throws<AggregateException>(() => operationService
+														.EditOperationAsync(operationUpdateDto)
 														.Wait());
 		}
 		finally
@@ -140,29 +154,6 @@ public class OperationServiceTests
 			dbCreator.Dispose();
 		}
 	}
-    [Fact]
-    public void EditOperationAsync_NameIsNull_AggregateExceptionExpected()
-    {
-        var dbCreator = new TestDBCreator();
-
-        try
-        {
-            //Arrange
-            dbCreator.CreateTestDB();
-            ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
-            OperationService operationService = servicesGreator.GetOperationService();
-            List<Operation> operations = operationService.GetAllAsync().Result;
-
-            //Act
-            Assert.Throws<AggregateException>(() => operationService
-                                                        .EditOperationAsync(operations[1].Id, null)
-                                                        .Wait());
-        }
-        finally
-        {
-            dbCreator.Dispose();
-        }
-    }
     [Fact]
     public void EditOperationAsync_NameIsEmpty_AggregateExceptionExpected()
     {
@@ -175,10 +166,15 @@ public class OperationServiceTests
             ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
             OperationService operationService = servicesGreator.GetOperationService();
             List<Operation> operations = operationService.GetAllAsync().Result;
+            OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
+            {
+                Id = operations[1].Id,
+                Name = ""
+            };
 
             //Act
             Assert.Throws<AggregateException>(() => operationService
-                                                        .EditOperationAsync(operations[1].Id, "")
+                                                        .EditOperationAsync(operationUpdateDto)
                                                         .Wait());
         }
         finally
@@ -198,10 +194,15 @@ public class OperationServiceTests
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
+            OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
+            {
+                Id = -6,
+                Name = "New Name"
+            };
 
-			//Act
-			Assert.Throws<AggregateException>(() => operationService
-														.EditOperationAsync(-6, "New Name")
+            //Act
+            Assert.Throws<AggregateException>(() => operationService
+														.EditOperationAsync(operationUpdateDto)
 														.Wait());
 		}
 		finally
@@ -395,7 +396,6 @@ public class OperationServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
-			List<Operation> operations = operationService.GetAllAsync().Result;
 
 			//Act
 			Assert.Throws<AggregateException>(() => operationService

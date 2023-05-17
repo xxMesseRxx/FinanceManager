@@ -1,5 +1,6 @@
 ﻿namespace FinanceManager.Tests;
 
+using FinanceManager.DAL;
 using FinanceManager.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;

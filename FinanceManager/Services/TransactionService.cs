@@ -1,5 +1,6 @@
 ﻿namespace FinanceManager.Services;
 
+using FinanceManager.DAL;
 using FinanceManager.Library.Interfaces;
 using FinanceManager.Model;
 using Microsoft.EntityFrameworkCore;

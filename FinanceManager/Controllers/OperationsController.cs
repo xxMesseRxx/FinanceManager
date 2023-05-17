@@ -4,6 +4,7 @@ using FinanceManager.Library.Interfaces;
 using FinanceManager.Model;
 using FinanceManager.Services;
 using Microsoft.AspNetCore.Mvc;
+using FinanceManager.DAL.DTO.Operation;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -36,16 +37,11 @@ public class OperationsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostAsync([FromBody] Operation operation)
+    public async Task<IActionResult> PostAsync([FromBody] OperationCreateDto operationCreateDto)
     {
-        if (operation.Id != 0)
-        {
-            return BadRequest(new { message = "Id must be empty" });
-        }
-
         try
         {
-            await _operationService.AddOperationAsync(operation.Name);
+            await _operationService.AddOperationAsync(operationCreateDto);
 
             return Ok();
         }
@@ -56,12 +52,12 @@ public class OperationsController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> PutAsync([FromBody] Operation operation)
+    public async Task<IActionResult> PutAsync([FromBody] OperationUpdateDto operationUpdateDto)
     {
         try
         {
-            await _operationService.EditOperationAsync(operation.Id, operation.Name);
-            var editedOperation = await _operationService.GetOperationAsync(operation.Id);
+            await _operationService.EditOperationAsync(operationUpdateDto);
+            var editedOperation = await _operationService.GetOperationAsync(operationUpdateDto.Id);
 
             return new ObjectResult(editedOperation);
         }

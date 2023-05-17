@@ -1,8 +1,8 @@
 using FinanceManager.Library.Interfaces;
-using FinanceManager.Model;
 using FinanceManager.Services;
 using Microsoft.EntityFrameworkCore;
 using FinanceManager.EndpointHandlers;
+using FinanceManager.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,17 +25,9 @@ app.UseEndpoints(endpoints =>
 
 app.MapGet("/", () => "Welcome page");
 
-//app.MapPost("/operations", OperationEndpointsHandler.AddAsync);
-//app.MapPut("/operations", OperationEndpointsHandler.EditAsync);
-//app.MapGet("/operations", OperationEndpointsHandler.GetAllAsync);
-//app.MapGet("/operations/{id:int}", OperationEndpointsHandler.GetOperationAsync);
-//app.MapDelete("/operations/{id:int}", OperationEndpointsHandler.RemoveAsync);
-
-app.MapPost("/transactions", TransactionEndpointsHandler.AddAsync);
-app.MapPut("/transactions", TransactionEndpointsHandler.EditAsync);
-app.MapGet("/transactions", TransactionEndpointsHandler.GetAllAsync);
-app.MapGet("/transactions/{id:int}", TransactionEndpointsHandler.GetTransactionAsync);
-app.MapDelete("/transactions/{id:int}", TransactionEndpointsHandler.RemoveAsync);
+//app.MapPost("/transactions", TransactionEndpointsHandler.AddAsync);
+//app.MapPut("/transactions", TransactionEndpointsHandler.EditAsync);
+//app.MapDelete("/transactions/{id:int}", TransactionEndpointsHandler.RemoveAsync);
 
 app.MapGet("/dailyReport/{date}", ReportEndpointsHandler.GetDailyReportAsync);
 app.MapGet("/periodReport/{startDate}-{endDate}", ReportEndpointsHandler.GetPeriodReportAsync);

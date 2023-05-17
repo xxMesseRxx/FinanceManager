@@ -1,8 +1,11 @@
 ﻿namespace FinanceManager.Services;
 
+using FinanceManager.DAL;
+using FinanceManager.DAL.DTO.Operation;
 using FinanceManager.Library.Interfaces;
 using FinanceManager.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,14 +18,14 @@ public class OperationService : IOperationService
 		_db = context;
 	}
 
-	public async Task AddOperationAsync(string name)
+	public async Task AddOperationAsync(OperationCreateDto operationCreateDto)
 	{
-		if (string.IsNullOrEmpty(name))
+		if (string.IsNullOrEmpty(operationCreateDto.Name))
 		{
-			throw new ArgumentNullException(nameof(name));
+			throw new ArgumentNullException(nameof(operationCreateDto.Name));
 		}
 
-		Operation newOperation = new Operation() { Name = name };
+		Operation newOperation = new Operation() { Name = operationCreateDto.Name };
 		 
 		try
 		{
@@ -34,18 +37,18 @@ public class OperationService : IOperationService
 			throw new ArgumentException("Name isn't unique");
 		}
 	}
-	public async Task EditOperationAsync(int id, string name)
+	public async Task EditOperationAsync(OperationUpdateDto operationUpdateDto)
 	{
-        if (string.IsNullOrEmpty(name))
+        if (string.IsNullOrEmpty(operationUpdateDto.Name))
         {
-            throw new ArgumentNullException(nameof(name));
+            throw new ArgumentNullException(nameof(operationUpdateDto.Name));
         }
 
-        Operation? operation = await _db.Operations.FindAsync(id);
+        Operation? operation = await _db.Operations.FindAsync(operationUpdateDto.Id);
 
 		if (operation is not null)
 		{
-			operation.Name = name;
+			operation.Name = operationUpdateDto.Name;
 
 			try
 			{
