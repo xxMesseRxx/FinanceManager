@@ -25,10 +25,6 @@ app.UseEndpoints(endpoints =>
 
 app.MapGet("/", () => "Welcome page");
 
-//app.MapPost("/transactions", TransactionEndpointsHandler.AddAsync);
-//app.MapPut("/transactions", TransactionEndpointsHandler.EditAsync);
-//app.MapDelete("/transactions/{id:int}", TransactionEndpointsHandler.RemoveAsync);
-
 app.MapGet("/dailyReport/{date}", ReportEndpointsHandler.GetDailyReportAsync);
 app.MapGet("/periodReport/{startDate}-{endDate}", ReportEndpointsHandler.GetPeriodReportAsync);
 
