@@ -25,7 +25,4 @@ app.UseEndpoints(endpoints =>
 
 app.MapGet("/", () => "Welcome page");
 
-app.MapGet("/dailyReport/{date}", ReportEndpointsHandler.GetDailyReportAsync);
-app.MapGet("/periodReport/{startDate}-{endDate}", ReportEndpointsHandler.GetPeriodReportAsync);
-
 app.Run();
