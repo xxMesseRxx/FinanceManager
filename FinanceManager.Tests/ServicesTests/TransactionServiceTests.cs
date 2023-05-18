@@ -1,12 +1,13 @@
 ﻿namespace FinanceManager.Tests.ServicesTests;
 
+using FinanceManager.DAL.DTO.Transaction;
 using FinanceManager.Model;
 using FinanceManager.Services;
 
 public class TransactionServiceTests
 {
 	[Fact]
-	public void AddTransactionAsync_CorArgs_6TransactionsExpected()
+	public void AddTransactionAsync_CorArg_6TransactionsExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -18,10 +19,17 @@ public class TransactionServiceTests
 			TransactionService transactionService = servicesGreator.GetTransactionService();
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
+			TransactionCreateDto transactionCreateDto = new TransactionCreateDto()
+			{
+				Sum = 500,
+				Discription = "Some discription",
+				DateTime = DateTime.Now,
+				OperationId = operations[0].Id
+			};
 			int expectedTransactionCount = 6;
 
 			//Act
-			transactionService.AddTransactionAsync(500, "sdf", DateTime.Now, operations[0].Id).Wait();
+			transactionService.AddTransactionAsync(transactionCreateDto).Wait();
 			int result = transactionService.GetAllAsync().Result.Count;
 
 			//Assert
@@ -33,7 +41,7 @@ public class TransactionServiceTests
 		}
 	}
 	[Fact]
-	public void AddTransactionAsync_OperationIsNotExist_AggregateExceptionExpected()
+	public void AddTransactionAsync_OperationIdIsNotExist_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -43,10 +51,17 @@ public class TransactionServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			TransactionService transactionService = servicesGreator.GetTransactionService();
+            TransactionCreateDto transactionCreateDto = new TransactionCreateDto()
+            {
+                Sum = 500,
+                Discription = "Some discription",
+                DateTime = DateTime.Now,
+                OperationId = -5
+            };
 
-			//Act
-			Assert.Throws<AggregateException>(() => transactionService
-														.AddTransactionAsync(500, "sdf", DateTime.Now, -5)
+            //Act
+            Assert.Throws<AggregateException>(() => transactionService
+														.AddTransactionAsync(transactionCreateDto)
 														.Wait());
 		}
 		finally
@@ -56,7 +71,7 @@ public class TransactionServiceTests
 	}
 
 	[Fact]
-	public void EditTransactionAsync_CorArgs_ChangedTransactionExpected()
+	public void EditTransactionAsync_CorArg_ChangedTransactionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -70,22 +85,21 @@ public class TransactionServiceTests
 			List<Operation> operations = operationService.GetAllAsync().Result;
 			List<Transaction> transactions = transactionService.GetAllAsync().Result;
 
-			Transaction editedTransaction = transactions[0];
-			editedTransaction.Sum = 50001;
-			editedTransaction.DateTime = DateTime.Now;
-			editedTransaction.Discription = "New";
-			editedTransaction.OperationId = operations[3].Id;
+			TransactionUpdateDto transactionUpdateDto = new TransactionUpdateDto()
+			{
+				Id = transactions[0].Id,
+				Sum = 50001,
+				DateTime = DateTime.Now,
+				Discription = "New",
+				OperationId = operations[3].Id
+			};
 
 			//Act
-			transactionService.EditTransactionAsync(editedTransaction.Id,
-													editedTransaction.Sum,
-													editedTransaction.Discription,
-													editedTransaction.DateTime,
-													editedTransaction.OperationId).Wait();
-			Transaction result = transactionService.GetTransactionAsync(editedTransaction.Id).Result;
+			transactionService.EditTransactionAsync(transactionUpdateDto).Wait();
+			Transaction result = transactionService.GetTransactionAsync(transactionUpdateDto.Id).Result;
 
 			//Assert
-			Assert.Equal(editedTransaction, result);
+			Assert.Equal(transactionUpdateDto.Discription, result.Discription);
 		}
 		finally
 		{
@@ -105,9 +119,18 @@ public class TransactionServiceTests
 			TransactionService transactionService = servicesGreator.GetTransactionService();
 			List<Transaction> transactions = transactionService.GetAllAsync().Result;
 
-			//Act
-			Assert.Throws<AggregateException>(() => transactionService
-														.EditTransactionAsync(-6, 500, "sdf", DateTime.Now, transactions[0].OperationId)
+            TransactionUpdateDto transactionUpdateDto = new TransactionUpdateDto()
+            {
+                Id = -6,
+                Sum = 50001,
+                DateTime = DateTime.Now,
+                Discription = "New",
+                OperationId = transactions[0].OperationId
+            };
+
+            //Act
+            Assert.Throws<AggregateException>(() => transactionService
+														.EditTransactionAsync(transactionUpdateDto)
 														.Wait());
 		}
 		finally
@@ -128,9 +151,18 @@ public class TransactionServiceTests
 			TransactionService transactionService = servicesGreator.GetTransactionService();
 			List<Transaction> transactions = transactionService.GetAllAsync().Result;
 
-			//Act
-			Assert.Throws<AggregateException>(() => transactionService
-														.EditTransactionAsync(transactions[0].Id, 500, "sdf", DateTime.Now, -6)
+            TransactionUpdateDto transactionUpdateDto = new TransactionUpdateDto()
+            {
+                Id = transactions[0].Id,
+                Sum = 50001,
+                DateTime = DateTime.Now,
+                Discription = "New",
+                OperationId = -6
+            };
+
+            //Act
+            Assert.Throws<AggregateException>(() => transactionService
+														.EditTransactionAsync(transactionUpdateDto)
 														.Wait());
 		}
 		finally

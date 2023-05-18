@@ -3,6 +3,7 @@
 using FinanceManager.DAL;
 using FinanceManager.Library.Interfaces;
 using FinanceManager.Model;
+using FinanceManager.DAL.DTO.Transaction;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,40 +18,45 @@ public class TransactionService : ITransactionService
 		_db = context;
 	}
 
-	public async Task AddTransactionAsync(int sum, string discription, DateTime dateTime, int operationId)
+	public async Task AddTransactionAsync(TransactionCreateDto transactionCreateDto)
 	{
-		Transaction newTransaction = new Transaction() { Sum = sum, Discription = discription,
-																		DateTime = dateTime,
-																		OperationId = operationId};
+		Transaction newTransaction = new Transaction()
+		{ 
+			Sum = transactionCreateDto.Sum,
+			Discription = transactionCreateDto.Discription,
+			DateTime = transactionCreateDto.DateTime,
+			OperationId = transactionCreateDto.OperationId
+        };
+
 		try
 		{
 			_db.Transactions.Add(newTransaction);
 			_db.SaveChanges();
 		}
-		catch (DbUpdateException)
+		catch (DbUpdateException ex)
 		{
-			throw new ArgumentException("OperationId isn't exist");
+			throw new ArgumentException(ex.Message);
 		}
 	}
-	public async Task EditTransactionAsync(int id, int sum, string discription, DateTime dateTime, int operationId)
+	public async Task EditTransactionAsync(TransactionUpdateDto transactionUpdateDto)
 	{
-		Transaction? transaction = await _db.Transactions.FindAsync(id);
+		Transaction? transaction = await _db.Transactions.FindAsync(transactionUpdateDto.Id);
 
 		if (transaction is not null)
 		{
-			transaction.Sum = sum;
-			transaction.Discription = discription;
-			transaction.DateTime = dateTime;
-			transaction.OperationId = operationId;
+			transaction.Sum = transactionUpdateDto.Sum;
+			transaction.Discription = transactionUpdateDto.Discription;
+			transaction.DateTime = transactionUpdateDto.DateTime;
+			transaction.OperationId = transactionUpdateDto.OperationId;
 
 			try
 			{
 				_db.Transactions.Update(transaction);
 				_db.SaveChanges();
 			}
-			catch (DbUpdateException)
+			catch (DbUpdateException ex)
 			{
-				throw new ArgumentException("Operation Id isn't exist");
+				throw new ArgumentException(ex.Message);
 			}
 		}
 		else

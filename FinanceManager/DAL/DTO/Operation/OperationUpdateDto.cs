@@ -1,8 +1,7 @@
 ﻿namespace FinanceManager.DAL.DTO.Operation
 {
-    public class OperationUpdateDto
+    public class OperationUpdateDto : OperationCreateDto
     {
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
     }
 }
