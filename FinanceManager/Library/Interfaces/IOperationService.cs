@@ -6,9 +6,9 @@ using FinanceManager.Model;
 public interface IOperationService
 {
 	public Task<List<Operation>> GetAllAsync();
-	public Task<Operation> GetOperationAsync(int id);
-    public Task<Operation> GetOperationAsync(string name);
-    public Task RemoveOperationAsync(int id);
-	public Task EditOperationAsync(OperationUpdateDto operationUpdateDto);
-	public Task AddOperationAsync(OperationCreateDto operationCreateDto);
+	public Task<Operation> GetAsync(int id);
+    public Task<Operation> GetAsync(string name);
+    public Task RemoveAsync(int id);
+	public Task EditAsync(OperationUpdateDto operationUpdateDto);
+	public Task AddAsync(OperationCreateDto operationCreateDto);
 }

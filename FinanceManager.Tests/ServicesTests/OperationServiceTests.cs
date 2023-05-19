@@ -21,7 +21,7 @@ public class OperationServiceTests
 			int expectedOperationCount = 5;
 
 			//Act
-			operationService.AddOperationAsync(operationCreateDto).Wait();
+			operationService.AddAsync(operationCreateDto).Wait();
 			int result = operationService.GetAllAsync().Result.Count;
 
 			//Assert
@@ -46,7 +46,7 @@ public class OperationServiceTests
 			OperationCreateDto operationCreateDto = new OperationCreateDto() { Name = "Зарплата" };
 
             //Act
-            Assert.Throws<AggregateException>(() => operationService.AddOperationAsync(operationCreateDto).Wait());
+            Assert.Throws<AggregateException>(() => operationService.AddAsync(operationCreateDto).Wait());
 		}
 		finally
 		{
@@ -66,7 +66,7 @@ public class OperationServiceTests
             OperationService operationService = servicesGreator.GetOperationService();
 
             //Act
-            Assert.Throws<AggregateException>(() => operationService.AddOperationAsync(null).Wait());
+            Assert.Throws<AggregateException>(() => operationService.AddAsync(null).Wait());
         }
         finally
         {
@@ -87,7 +87,7 @@ public class OperationServiceTests
 			OperationCreateDto operationCreateDto = new OperationCreateDto() { Name = "" };
 
             //Act
-            Assert.Throws<AggregateException>(() => operationService.AddOperationAsync(operationCreateDto).Wait());
+            Assert.Throws<AggregateException>(() => operationService.AddAsync(operationCreateDto).Wait());
         }
         finally
         {
@@ -115,8 +115,8 @@ public class OperationServiceTests
 			};
 
 			//Act
-			operationService.EditOperationAsync(operationUpdateDto).Wait();
-			string result = operationService.GetOperationAsync(operations[0].Id).Result.Name;
+			operationService.EditAsync(operationUpdateDto).Wait();
+			string result = operationService.GetAsync(operations[0].Id).Result.Name;
 
 			//Assert
 			Assert.Equal(expectedNewName, result);
@@ -146,7 +146,7 @@ public class OperationServiceTests
 
             //Act
             Assert.Throws<AggregateException>(() => operationService
-														.EditOperationAsync(operationUpdateDto)
+														.EditAsync(operationUpdateDto)
 														.Wait());
 		}
 		finally
@@ -174,7 +174,7 @@ public class OperationServiceTests
 
             //Act
             Assert.Throws<AggregateException>(() => operationService
-                                                        .EditOperationAsync(operationUpdateDto)
+                                                        .EditAsync(operationUpdateDto)
                                                         .Wait());
         }
         finally
@@ -202,7 +202,7 @@ public class OperationServiceTests
 
             //Act
             Assert.Throws<AggregateException>(() => operationService
-														.EditOperationAsync(operationUpdateDto)
+														.EditAsync(operationUpdateDto)
 														.Wait());
 		}
 		finally
@@ -251,7 +251,7 @@ public class OperationServiceTests
 			int expectedOperationId = operations[0].Id;
 
 			//Act
-			var requiredOperation = operationService.GetOperationAsync(expectedOperationId).Result;
+			var requiredOperation = operationService.GetAsync(expectedOperationId).Result;
 			int result = requiredOperation.Id;
 
 			//Assert
@@ -277,7 +277,7 @@ public class OperationServiceTests
             string expectedOperationName = operations[0].Name;
 
             //Act
-            var requiredOperation = operationService.GetOperationAsync(expectedOperationName).Result;
+            var requiredOperation = operationService.GetAsync(expectedOperationName).Result;
             string result = requiredOperation.Name;
 
             //Assert
@@ -301,7 +301,7 @@ public class OperationServiceTests
 			OperationService operationService = servicesGreator.GetOperationService();
 
 			//Act
-			var result = operationService.GetOperationAsync(-7).Result;
+			var result = operationService.GetAsync(-7).Result;
 
 			//Assert
 			Assert.Null(result);
@@ -324,7 +324,7 @@ public class OperationServiceTests
             OperationService operationService = servicesGreator.GetOperationService();
 
             //Act
-            var result = operationService.GetOperationAsync("blabla").Result;
+            var result = operationService.GetAsync("blabla").Result;
 
             //Assert
             Assert.Null(result);
@@ -351,7 +351,7 @@ public class OperationServiceTests
 			int expectedOperationCount = 3;
 
 			//Act
-			operationService.RemoveOperationAsync(operationWithoutTransaction.Id).Wait();
+			operationService.RemoveAsync(operationWithoutTransaction.Id).Wait();
 			int result = operationService.GetAllAsync().Result.Count;
 
 			//Assert
@@ -377,7 +377,7 @@ public class OperationServiceTests
 
 			//Act
 			Assert.Throws<AggregateException>(() => operationService
-														.RemoveOperationAsync(operations[1].Id)
+														.RemoveAsync(operations[1].Id)
 														.Wait());
 		}
 		finally
@@ -399,7 +399,7 @@ public class OperationServiceTests
 
 			//Act
 			Assert.Throws<AggregateException>(() => operationService
-														.RemoveOperationAsync(-3)
+														.RemoveAsync(-3)
 														.Wait());
 		}
 		finally

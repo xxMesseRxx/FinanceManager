@@ -1,7 +1,7 @@
 ﻿namespace FinanceManager.Controllers;
 
+using FinanceManager.DAL;
 using FinanceManager.Library.Interfaces;
-using FinanceManager.Model;
 using FinanceManager.Services;
 using Microsoft.AspNetCore.Mvc;
 

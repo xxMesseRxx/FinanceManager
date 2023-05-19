@@ -26,7 +26,7 @@ public class TransactionsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync(int id)
     {
-        Transaction transaction = await _transactionService.GetTransactionAsync(id);
+        Transaction transaction = await _transactionService.GetAsync(id);
 
         if (transaction is null)
         {
@@ -41,7 +41,7 @@ public class TransactionsController : ControllerBase
     {
         try
         {
-            await _transactionService.AddTransactionAsync(transactionCreateDto);
+            await _transactionService.AddAsync(transactionCreateDto);
 
             return Ok();
         }
@@ -56,8 +56,8 @@ public class TransactionsController : ControllerBase
     {
         try
         {
-            await _transactionService.EditTransactionAsync(transactionUpdateDto);
-            var editedTransaction = await _transactionService.GetTransactionAsync(transactionUpdateDto.Id);
+            await _transactionService.EditAsync(transactionUpdateDto);
+            var editedTransaction = await _transactionService.GetAsync(transactionUpdateDto.Id);
 
             return new ObjectResult(editedTransaction);
         }
@@ -72,8 +72,8 @@ public class TransactionsController : ControllerBase
     {
         try
         {
-            var removedTransaction = await _transactionService.GetTransactionAsync(id);
-            await _transactionService.RemoveTransactionAsync(id);
+            var removedTransaction = await _transactionService.GetAsync(id);
+            await _transactionService.RemoveAsync(id);
 
             return new ObjectResult(removedTransaction);
         }

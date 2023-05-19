@@ -18,7 +18,7 @@ public class OperationService : IOperationService
 		_db = context;
 	}
 
-	public async Task AddOperationAsync(OperationCreateDto operationCreateDto)
+	public async Task AddAsync(OperationCreateDto operationCreateDto)
 	{
 		if (string.IsNullOrEmpty(operationCreateDto.Name))
 		{
@@ -37,7 +37,8 @@ public class OperationService : IOperationService
 			throw new ArgumentException("Name isn't unique");
 		}
 	}
-	public async Task EditOperationAsync(OperationUpdateDto operationUpdateDto)
+
+	public async Task EditAsync(OperationUpdateDto operationUpdateDto)
 	{
         if (string.IsNullOrEmpty(operationUpdateDto.Name))
         {
@@ -46,56 +47,56 @@ public class OperationService : IOperationService
 
         Operation? operation = await _db.Operations.FindAsync(operationUpdateDto.Id);
 
-		if (operation is not null)
+		if (operation is null)
 		{
-			operation.Name = operationUpdateDto.Name;
+            throw new ArgumentException("Operation isn't exist");
+        }
 
-			try
-			{
-				_db.Operations.Update(operation);
-				_db.SaveChanges();
-			}
-			catch (DbUpdateException)
-			{
-				throw new ArgumentException("Name isn't unique");
-			}
-		}
-		else
-		{
-			throw new ArgumentException("Operation isn't exist");
-		}
+        operation.Name = operationUpdateDto.Name;
+
+        try
+        {
+            _db.Operations.Update(operation);
+            _db.SaveChanges();
+        }
+        catch (DbUpdateException)
+        {
+            throw new ArgumentException("Name isn't unique");
+        }
 	}
+
 	public async Task<List<Operation>> GetAllAsync()
 	{
 		return _db.Operations.ToList();
 	}
-	public async Task<Operation> GetOperationAsync(int id)
+
+	public async Task<Operation> GetAsync(int id)
 	{
 		return await _db.Operations.FindAsync(id);
 	}
-    public async Task<Operation> GetOperationAsync(string name)
+
+    public async Task<Operation> GetAsync(string name)
     {
         return await _db.Operations.FirstOrDefaultAsync(o => o.Name == name);
     }
-    public async Task RemoveOperationAsync(int id)
+
+    public async Task RemoveAsync(int id)
 	{
 		Operation? operation = await _db.Operations.FindAsync(id);
 
-		if (operation is not null)
+		if (operation is null)
 		{
-			try
-			{
-				_db.Operations.Remove(operation);
-				_db.SaveChanges();
-			}
-			catch (DbUpdateException)
-			{
-				throw new ArgumentException("Operation cannot be deleted when it has got financial operations");
-			}
-		}
-		else
-		{
-			throw new ArgumentException("Operation isn't exist");
-		}
+            throw new ArgumentException("Operation isn't exist");
+        }
+
+        try
+        {
+            _db.Operations.Remove(operation);
+            _db.SaveChanges();
+        }
+        catch (DbUpdateException)
+        {
+            throw new ArgumentException("Operation cannot be deleted when it has got financial operations");
+        }
 	}
 }

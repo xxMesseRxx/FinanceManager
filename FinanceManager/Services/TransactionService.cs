@@ -18,7 +18,7 @@ public class TransactionService : ITransactionService
 		_db = context;
 	}
 
-	public async Task AddTransactionAsync(TransactionCreateDto transactionCreateDto)
+	public async Task AddAsync(TransactionCreateDto transactionCreateDto)
 	{
 		Transaction newTransaction = new Transaction()
 		{ 
@@ -38,41 +38,43 @@ public class TransactionService : ITransactionService
 			throw new ArgumentException(ex.Message);
 		}
 	}
-	public async Task EditTransactionAsync(TransactionUpdateDto transactionUpdateDto)
+
+	public async Task EditAsync(TransactionUpdateDto transactionUpdateDto)
 	{
 		Transaction? transaction = await _db.Transactions.FindAsync(transactionUpdateDto.Id);
 
-		if (transaction is not null)
+		if (transaction is null)
 		{
-			transaction.Sum = transactionUpdateDto.Sum;
-			transaction.Discription = transactionUpdateDto.Discription;
-			transaction.DateTime = transactionUpdateDto.DateTime;
-			transaction.OperationId = transactionUpdateDto.OperationId;
+            throw new ArgumentException("Transaction isn't exist");
+        }
 
-			try
-			{
-				_db.Transactions.Update(transaction);
-				_db.SaveChanges();
-			}
-			catch (DbUpdateException ex)
-			{
-				throw new ArgumentException(ex.Message);
-			}
-		}
-		else
-		{
-			throw new ArgumentException("Transaction isn't exist");
-		}
-	}
+        transaction.Sum = transactionUpdateDto.Sum;
+        transaction.Discription = transactionUpdateDto.Discription;
+        transaction.DateTime = transactionUpdateDto.DateTime;
+        transaction.OperationId = transactionUpdateDto.OperationId;
+
+        try
+        {
+            _db.Transactions.Update(transaction);
+            _db.SaveChanges();
+        }
+        catch (DbUpdateException ex)
+        {
+            throw new ArgumentException(ex.Message);
+        }
+    }
+
 	public async Task<List<Transaction>> GetAllAsync()
 	{
 		return _db.Transactions.ToList();
 	}
-	public async Task<Transaction> GetTransactionAsync(int id)
+
+	public async Task<Transaction> GetAsync(int id)
 	{
 		return await _db.Transactions.FindAsync(id);
 	}
-    public async Task<List<Transaction>> GetTransactionsByDateAsync(DateOnly date)
+
+    public async Task<List<Transaction>> GetByDateAsync(DateOnly date)
     {
 		DateTime dateTime = date.ToDateTime(TimeOnly.MinValue);
 
@@ -81,7 +83,8 @@ public class TransactionService : ITransactionService
 						.Include(t => t.Operation)
 						.ToListAsync();
     }
-    public async Task<List<Transaction>> GetTransactionsByDateAsync(DateOnly startDate, DateOnly endDate)
+
+    public async Task<List<Transaction>> GetByDateAsync(DateOnly startDate, DateOnly endDate)
     {
         DateTime startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
         DateTime endDateTime = endDate.ToDateTime(TimeOnly.MinValue);
@@ -92,7 +95,8 @@ public class TransactionService : ITransactionService
                         .Include(t => t.Operation)
                         .ToListAsync();
     }
-    public async Task<List<Transaction>> GetTransactionWithOperIdAsync(int operationId)
+
+    public async Task<List<Transaction>> GetWithOperIdAsync(int operationId)
 	{
 		List<Transaction> transaction = await _db.Transactions
 												.Where(t => t.OperationId == operationId)
@@ -100,7 +104,8 @@ public class TransactionService : ITransactionService
 
 		return transaction;
 	}
-	public async Task RemoveTransactionAsync(int id)
+
+	public async Task RemoveAsync(int id)
 	{
 		Transaction? transaction = await _db.Transactions.FindAsync(id);
 

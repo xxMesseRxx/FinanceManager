@@ -4,28 +4,32 @@ using FinanceManager.Model;
 
 public abstract class Report
 {
-    public List<Transaction> Transactions { get; protected set; }
+    public List<Transaction> Transactions 
+    {
+        get
+        {
+            return _transactions;
+        }
+        protected set
+        {
+            _transactions = value;
+            CountTotalExpenses();
+            CountTotalIncome();
+        }
+    }
     public int TotalIncome { get; protected set; }
     public int TotalExpenses { get; protected set; }
 
+    private List<Transaction> _transactions;
+
     protected void CountTotalIncome()
     {
-        foreach (var transaction in Transactions)
-        {
-            if (transaction.Sum > 0)
-            {
-                TotalIncome += transaction.Sum;
-            }
-        }
+        TotalIncome = Transactions.Where(t => t.Sum > 0)
+                                  .Sum(t => t.Sum);   
     }
     protected void CountTotalExpenses()
     {
-        foreach (var transaction in Transactions)
-        {
-            if (transaction.Sum < 0)
-            {
-                TotalExpenses += transaction.Sum;
-            }
-        }
+        TotalExpenses = Transactions.Where(t => t.Sum < 0)
+                                    .Sum(t => t.Sum);
     }
 }

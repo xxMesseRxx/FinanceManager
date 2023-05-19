@@ -26,7 +26,7 @@ public class OperationsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync(int id)
     {
-        Operation operation = await _operationService.GetOperationAsync(id);
+        Operation operation = await _operationService.GetAsync(id);
 
         if (operation is null)
         {
@@ -41,7 +41,7 @@ public class OperationsController : ControllerBase
     {
         try
         {
-            await _operationService.AddOperationAsync(operationCreateDto);
+            await _operationService.AddAsync(operationCreateDto);
 
             return Ok();
         }
@@ -56,8 +56,8 @@ public class OperationsController : ControllerBase
     {
         try
         {
-            await _operationService.EditOperationAsync(operationUpdateDto);
-            var editedOperation = await _operationService.GetOperationAsync(operationUpdateDto.Id);
+            await _operationService.EditAsync(operationUpdateDto);
+            var editedOperation = await _operationService.GetAsync(operationUpdateDto.Id);
 
             return new ObjectResult(editedOperation);
         }
@@ -72,8 +72,8 @@ public class OperationsController : ControllerBase
     {
         try
         {
-            var removedOperation = await _operationService.GetOperationAsync(id);
-            await _operationService.RemoveOperationAsync(id);
+            var removedOperation = await _operationService.GetAsync(id);
+            await _operationService.RemoveAsync(id);
 
             return new ObjectResult(removedOperation);
         }

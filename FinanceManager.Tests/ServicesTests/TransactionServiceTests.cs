@@ -29,7 +29,7 @@ public class TransactionServiceTests
 			int expectedTransactionCount = 6;
 
 			//Act
-			transactionService.AddTransactionAsync(transactionCreateDto).Wait();
+			transactionService.AddAsync(transactionCreateDto).Wait();
 			int result = transactionService.GetAllAsync().Result.Count;
 
 			//Assert
@@ -61,7 +61,7 @@ public class TransactionServiceTests
 
             //Act
             Assert.Throws<AggregateException>(() => transactionService
-														.AddTransactionAsync(transactionCreateDto)
+														.AddAsync(transactionCreateDto)
 														.Wait());
 		}
 		finally
@@ -95,8 +95,8 @@ public class TransactionServiceTests
 			};
 
 			//Act
-			transactionService.EditTransactionAsync(transactionUpdateDto).Wait();
-			Transaction result = transactionService.GetTransactionAsync(transactionUpdateDto.Id).Result;
+			transactionService.EditAsync(transactionUpdateDto).Wait();
+			Transaction result = transactionService.GetAsync(transactionUpdateDto.Id).Result;
 
 			//Assert
 			Assert.Equal(transactionUpdateDto.Discription, result.Discription);
@@ -130,7 +130,7 @@ public class TransactionServiceTests
 
             //Act
             Assert.Throws<AggregateException>(() => transactionService
-														.EditTransactionAsync(transactionUpdateDto)
+														.EditAsync(transactionUpdateDto)
 														.Wait());
 		}
 		finally
@@ -162,7 +162,7 @@ public class TransactionServiceTests
 
             //Act
             Assert.Throws<AggregateException>(() => transactionService
-														.EditTransactionAsync(transactionUpdateDto)
+														.EditAsync(transactionUpdateDto)
 														.Wait());
 		}
 		finally
@@ -211,7 +211,7 @@ public class TransactionServiceTests
 			var expectedTransaction = transactions[2];
 
 			//Act
-			var result = transactionService.GetTransactionAsync(expectedTransaction.Id).Result;
+			var result = transactionService.GetAsync(expectedTransaction.Id).Result;
 
 			//Assert
 			Assert.Equal(expectedTransaction, result);
@@ -234,7 +234,7 @@ public class TransactionServiceTests
 			TransactionService transactionService = servicesGreator.GetTransactionService();
 
 			//Act
-			var result = transactionService.GetTransactionAsync(-5).Result;
+			var result = transactionService.GetAsync(-5).Result;
 
 			//Assert
 			Assert.Null(result);
@@ -260,7 +260,7 @@ public class TransactionServiceTests
 			int expected = 2;
 
 			//Act
-            int result = transactionService.GetTransactionsByDateAsync(date).Result.Count;
+            int result = transactionService.GetByDateAsync(date).Result.Count;
 
 			//Assert
 			Assert.Equal(expected, result);
@@ -285,7 +285,7 @@ public class TransactionServiceTests
             int expected = 0;
 
             //Act
-            int result = transactionService.GetTransactionsByDateAsync(date).Result.Count;
+            int result = transactionService.GetByDateAsync(date).Result.Count;
 
             //Assert
             Assert.Equal(expected, result);
@@ -312,7 +312,7 @@ public class TransactionServiceTests
 
             //Act
             int result = transactionService
-							.GetTransactionsByDateAsync(startDate, endDate)
+							.GetByDateAsync(startDate, endDate)
 							.Result
 							.Count;
 
@@ -341,7 +341,7 @@ public class TransactionServiceTests
 
             //Act
             int result = transactionService
-                            .GetTransactionsByDateAsync(startDate, endDate)
+                            .GetByDateAsync(startDate, endDate)
                             .Result
                             .Count;
 
@@ -371,7 +371,7 @@ public class TransactionServiceTests
 			int expected = 1;
 
 			//Act
-			int result = transactionService.GetTransactionWithOperIdAsync(operation.Id).Result.Count;
+			int result = transactionService.GetWithOperIdAsync(operation.Id).Result.Count;
 
 			//Assert
 			Assert.Equal(expected, result);
@@ -395,7 +395,7 @@ public class TransactionServiceTests
 			int expected = 0;
 
 			//Act
-			int result = transactionService.GetTransactionWithOperIdAsync(-5).Result.Count;
+			int result = transactionService.GetWithOperIdAsync(-5).Result.Count;
 
 			//Assert
 			Assert.Equal(expected, result);
@@ -421,7 +421,7 @@ public class TransactionServiceTests
 			int expected = 4;
 
 			//Act
-			transactionService.RemoveTransactionAsync(transactions[0].Id).Wait();
+			transactionService.RemoveAsync(transactions[0].Id).Wait();
 			int result = transactionService.GetAllAsync().Result.Count;
 
 			//Assert
@@ -446,7 +446,7 @@ public class TransactionServiceTests
 
 			//Act
 			Assert.Throws<AggregateException>(() => transactionService
-														.RemoveTransactionAsync(-6)
+														.RemoveAsync(-6)
 														.Wait());
 		}
 		finally
