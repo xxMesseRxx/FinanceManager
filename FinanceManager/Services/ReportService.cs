@@ -19,6 +19,7 @@ public class ReportService : IReportService
 
         return dailyReport;
     }
+
     public async Task<PeriodReport> GetPeriodReportAsync(DateOnly startDate, DateOnly endDate)
     {
         PeriodReport periodReport = new PeriodReport(startDate, endDate,
