@@ -347,11 +347,10 @@ public class OperationServiceTests
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<Operation> operations = operationService.GetAllAsync().Result;
-			Operation operationWithoutTransaction = operations.Find(o => o.Transactions == null);
 			int expectedOperationCount = 3;
 
 			//Act
-			operationService.RemoveAsync(operationWithoutTransaction.Id).Wait();
+			operationService.RemoveAsync(operations[0].Id).Wait();
 			int result = operationService.GetAllAsync().Result.Count;
 
 			//Assert

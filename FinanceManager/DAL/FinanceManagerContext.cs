@@ -27,11 +27,6 @@ public class FinanceManagerContext : DbContext
         {
             entity.HasKey(t => t.Id).HasName("PK_Transactions_Id");
             entity.Property(t => t.DateTime).HasColumnType("datetime");
-            entity.HasOne(t => t.Operation).WithMany(o => o.Transactions)
-                .HasForeignKey(t => t.OperationId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_Transaction_Operation");
-
         });
     }
 }
