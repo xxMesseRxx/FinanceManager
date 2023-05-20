@@ -18,7 +18,7 @@ public class OperationsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<Operation>> GetAsync()
+    public async Task<List<OperationViewModel>> GetAsync()
     {
         return await _operationService.GetAllAsync();
     }

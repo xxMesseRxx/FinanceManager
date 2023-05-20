@@ -106,17 +106,17 @@ public class OperationServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
-			List<Operation> operations = operationService.GetAllAsync().Result;
+			List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
             string expectedNewName = "Ўкола";
 			OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
 			{
-				Id = operations[0].Id,
+				Id = operationsViewModel[0].Id,
 				Name = expectedNewName
 			};
 
 			//Act
 			operationService.EditAsync(operationUpdateDto).Wait();
-			string result = operationService.GetAsync(operations[0].Id).Result.Name;
+			string result = operationService.GetAsync(operationsViewModel[0].Id).Result.Name;
 
 			//Assert
 			Assert.Equal(expectedNewName, result);
@@ -137,11 +137,11 @@ public class OperationServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
-			List<Operation> operations = operationService.GetAllAsync().Result;
+			List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
             OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
             {
-                Id = operations[1].Id,
-                Name = operations[0].Name
+                Id = operationsViewModel[1].Id,
+                Name = operationsViewModel[0].Name
             };
 
             //Act
@@ -165,10 +165,10 @@ public class OperationServiceTests
             dbCreator.CreateTestDB();
             ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
             OperationService operationService = servicesGreator.GetOperationService();
-            List<Operation> operations = operationService.GetAllAsync().Result;
+            List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
             OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
             {
-                Id = operations[1].Id,
+                Id = operationsViewModel[1].Id,
                 Name = ""
             };
 
@@ -193,7 +193,6 @@ public class OperationServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
-			List<Operation> operations = operationService.GetAllAsync().Result;
             OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
             {
                 Id = -6,
@@ -247,8 +246,8 @@ public class OperationServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
-			List<Operation> operations = operationService.GetAllAsync().Result;
-			int expectedOperationId = operations[0].Id;
+			List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
+			int expectedOperationId = operationsViewModel[0].Id;
 
 			//Act
 			var requiredOperation = operationService.GetAsync(expectedOperationId).Result;
@@ -273,8 +272,8 @@ public class OperationServiceTests
             dbCreator.CreateTestDB();
             ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
             OperationService operationService = servicesGreator.GetOperationService();
-            List<Operation> operations = operationService.GetAllAsync().Result;
-            string expectedOperationName = operations[0].Name;
+            List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
+            string expectedOperationName = operationsViewModel[0].Name;
 
             //Act
             var requiredOperation = operationService.GetAsync(expectedOperationName).Result;
@@ -346,11 +345,11 @@ public class OperationServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
-			List<Operation> operations = operationService.GetAllAsync().Result;
+			List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
 			int expectedOperationCount = 3;
 
 			//Act
-			operationService.RemoveAsync(operations[0].Id).Wait();
+			operationService.RemoveAsync(operationsViewModel[0].Id).Wait();
 			int result = operationService.GetAllAsync().Result.Count;
 
 			//Assert
@@ -372,11 +371,11 @@ public class OperationServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			OperationService operationService = servicesGreator.GetOperationService();
-			List<Operation> operations = operationService.GetAllAsync().Result;
+			List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
 
 			//Act
 			Assert.Throws<AggregateException>(() => operationService
-														.RemoveAsync(operations[1].Id)
+														.RemoveAsync(operationsViewModel[1].Id)
 														.Wait());
 		}
 		finally

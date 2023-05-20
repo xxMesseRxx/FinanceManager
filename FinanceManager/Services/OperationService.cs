@@ -65,9 +65,17 @@ public class OperationService : IOperationService
         }
 	}
 
-	public async Task<List<Operation>> GetAllAsync()
+	public async Task<List<OperationViewModel>> GetAllAsync()
 	{
-		return _db.Operations.ToList();
+		List<Operation> operations = await _db.Operations.ToListAsync();
+
+		List<OperationViewModel> result = operations.Select(o => new OperationViewModel()
+		{
+			Id = o.Id,
+			Name = o.Name,
+		}).ToList();
+
+        return result;
 	}
 
 	public async Task<Operation> GetAsync(int id)
@@ -89,14 +97,21 @@ public class OperationService : IOperationService
             throw new ArgumentException("Operation isn't exist");
         }
 
+		Transaction? transaction = await _db.Transactions.FirstOrDefaultAsync(t => t.OperationId == id);
+
+		if (transaction is not null)
+		{
+			throw new InvalidOperationException("Operation cannot be deleted when it has got financial operations");
+		}
+
         try
         {
             _db.Operations.Remove(operation);
             _db.SaveChanges();
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException ex)
         {
-            throw new ArgumentException("Operation cannot be deleted when it has got financial operations");
+            throw new Exception(ex.Message);
         }
 	}
 }

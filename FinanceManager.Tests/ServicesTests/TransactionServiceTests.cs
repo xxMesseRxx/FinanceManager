@@ -1,5 +1,6 @@
 ﻿namespace FinanceManager.Tests.ServicesTests;
 
+using FinanceManager.DAL.DTO.Operation;
 using FinanceManager.DAL.DTO.Transaction;
 using FinanceManager.Model;
 using FinanceManager.Services;
@@ -18,13 +19,13 @@ public class TransactionServiceTests
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			TransactionService transactionService = servicesGreator.GetTransactionService();
 			OperationService operationService = servicesGreator.GetOperationService();
-			List<Operation> operations = operationService.GetAllAsync().Result;
+			List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
 			TransactionCreateDto transactionCreateDto = new TransactionCreateDto()
 			{
 				Sum = 500,
 				Discription = "Some discription",
 				DateTime = DateTime.Now,
-				OperationId = operations[0].Id
+				OperationId = operationsViewModel[0].Id
 			};
 			int expectedTransactionCount = 6;
 
@@ -82,7 +83,7 @@ public class TransactionServiceTests
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			TransactionService transactionService = servicesGreator.GetTransactionService();
 			OperationService operationService = servicesGreator.GetOperationService();
-			List<Operation> operations = operationService.GetAllAsync().Result;
+			List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
 			List<Transaction> transactions = transactionService.GetAllAsync().Result;
 
 			TransactionUpdateDto transactionUpdateDto = new TransactionUpdateDto()
@@ -91,7 +92,7 @@ public class TransactionServiceTests
 				Sum = 50001,
 				DateTime = DateTime.Now,
 				Discription = "New",
-				OperationId = operations[3].Id
+				OperationId = operationsViewModel[3].Id
 			};
 
 			//Act
@@ -366,12 +367,12 @@ public class TransactionServiceTests
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			TransactionService transactionService = servicesGreator.GetTransactionService();
 			OperationService operationService = servicesGreator.GetOperationService();
-			List<Operation> operations = operationService.GetAllAsync().Result;
-			Operation operation = operations.First(o => o.Name == "Оплата квартиры");
+			List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
+            OperationViewModel operationViewModel = operationsViewModel.First(o => o.Name == "Оплата квартиры");
 			int expected = 1;
 
 			//Act
-			int result = transactionService.GetWithOperIdAsync(operation.Id).Result.Count;
+			int result = transactionService.GetWithOperIdAsync(operationViewModel.Id).Result.Count;
 
 			//Assert
 			Assert.Equal(expected, result);
