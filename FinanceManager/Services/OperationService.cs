@@ -78,14 +78,40 @@ public class OperationService : IOperationService
         return result;
 	}
 
-	public async Task<Operation> GetAsync(int id)
+	public async Task<OperationViewModel> GetAsync(int id)
 	{
-		return await _db.Operations.FindAsync(id);
+		Operation? operation = await _db.Operations.FindAsync(id);
+
+		if (operation is null)
+		{
+			return null;
+		}
+
+		OperationViewModel result = new OperationViewModel()
+		{
+			Id = operation.Id,
+			Name = operation.Name,
+		};
+
+        return result;
 	}
 
-    public async Task<Operation> GetAsync(string name)
+    public async Task<OperationViewModel> GetAsync(string name)
     {
-        return await _db.Operations.FirstOrDefaultAsync(o => o.Name == name);
+        Operation? operation = await _db.Operations.FirstOrDefaultAsync(o => o.Name == name);
+
+        if (operation is null)
+        {
+            return null;
+        }
+
+        OperationViewModel result = new OperationViewModel()
+        {
+            Id = operation.Id,
+            Name = operation.Name,
+        };
+
+        return result;
     }
 
     public async Task RemoveAsync(int id)

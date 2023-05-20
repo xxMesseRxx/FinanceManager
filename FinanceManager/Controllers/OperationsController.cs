@@ -26,14 +26,14 @@ public class OperationsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync(int id)
     {
-        Operation operation = await _operationService.GetAsync(id);
+        OperationViewModel operationVM = await _operationService.GetAsync(id);
 
-        if (operation is null)
+        if (operationVM is null)
         {
             return NotFound(new { message = "Operation not found" });
         }
 
-        return new ObjectResult(operation);
+        return new ObjectResult(operationVM);
     }
 
     [HttpPost]
@@ -57,9 +57,9 @@ public class OperationsController : ControllerBase
         try
         {
             await _operationService.EditAsync(operationUpdateDto);
-            var editedOperation = await _operationService.GetAsync(operationUpdateDto.Id);
+            var editedOperationVM = await _operationService.GetAsync(operationUpdateDto.Id);
 
-            return new ObjectResult(editedOperation);
+            return new ObjectResult(editedOperationVM);
         }
         catch (ArgumentException ex)
         {
@@ -72,10 +72,10 @@ public class OperationsController : ControllerBase
     {
         try
         {
-            var removedOperation = await _operationService.GetAsync(id);
+            var removedOperationVM = await _operationService.GetAsync(id);
             await _operationService.RemoveAsync(id);
 
-            return new ObjectResult(removedOperation);
+            return new ObjectResult(removedOperationVM);
         }
         catch (ArgumentException ex)
         {

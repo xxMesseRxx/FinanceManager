@@ -8,7 +8,7 @@ using FinanceManager.Services;
 public class TransactionServiceTests
 {
 	[Fact]
-	public void AddTransactionAsync_CorArg_6TransactionsExpected()
+	public void AddAsync_CorArg_6TransactionsExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -42,7 +42,7 @@ public class TransactionServiceTests
 		}
 	}
 	[Fact]
-	public void AddTransactionAsync_OperationIdIsNotExist_AggregateExceptionExpected()
+	public void AddAsync_OperationIdIsNotExist_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -72,7 +72,7 @@ public class TransactionServiceTests
 	}
 
 	[Fact]
-	public void EditTransactionAsync_CorArg_ChangedTransactionExpected()
+	public void EditAsync_CorArg_ChangedTransactionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -108,7 +108,7 @@ public class TransactionServiceTests
 		}
 	}
 	[Fact]
-	public void EditTransactionAsync_TransactionIdIsNotExist_AggregateExceptionExpected()
+	public void EditAsync_TransactionIdIsNotExist_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -140,7 +140,7 @@ public class TransactionServiceTests
 		}
 	}
 	[Fact]
-	public void EditTransactionAsync_OperationIdIsNotExist_AggregateExceptionExpected()
+	public void EditAsync_OperationIdIsNotExist_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -198,7 +198,7 @@ public class TransactionServiceTests
 	}
 
 	[Fact]
-	public void GetTransactionAsync_CorId_RequiredTransactionExpected()
+	public void GetAsync_CorId_RequiredTransactionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -223,7 +223,7 @@ public class TransactionServiceTests
 		}
 	}
 	[Fact]
-	public void GetTransactionAsync_IncorId_NullExpected()
+	public void GetAsync_IncorId_NullExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -247,7 +247,7 @@ public class TransactionServiceTests
 	}
 
     [Fact]
-    public void GetTransactionsByDateAsync_CorDate_2TransactionsExpected()
+    public void GetByDateAsync_CorDate_2TransactionsExpected()
     {
         var dbCreator = new TestDBCreator();
 
@@ -272,7 +272,7 @@ public class TransactionServiceTests
         }
     }
     [Fact]
-    public void GetTransactionsByDateAsync_IncorDate_EmptyListExpected()
+    public void GetByDateAsync_IncorDate_EmptyListExpected()
     {
         var dbCreator = new TestDBCreator();
 
@@ -297,7 +297,7 @@ public class TransactionServiceTests
         }
     }
     [Fact]
-    public void GetTransactionsByDateAsync_CorDates_3TransactionsExpected()
+    public void GetByDateAsync_CorDates_3TransactionsExpected()
     {
         var dbCreator = new TestDBCreator();
 
@@ -326,7 +326,7 @@ public class TransactionServiceTests
         }
     }
     [Fact]
-    public void GetTransactionsByDateAsync_IncorDates_EmptyListExpected()
+    public void GetByDateAsync_IncorDates_EmptyListExpected()
     {
         var dbCreator = new TestDBCreator();
 
@@ -356,7 +356,7 @@ public class TransactionServiceTests
     }
 
     [Fact]
-	public void GetTransactionWithOperIdAsync_CorId_1TransactionExpected()
+	public void GetWithOperIdAsync_CorId_1TransactionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -383,7 +383,7 @@ public class TransactionServiceTests
 		}
 	}
 	[Fact]
-	public void GetTransactionWithOperIdAsync_IncorId_EmptyListExpected()
+	public void GetWithOperIdAsync_IncorId_EmptyListExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -408,7 +408,7 @@ public class TransactionServiceTests
 	}
 
 	[Fact]
-	public void RemoveTransactionAsync_CorId_4TransactionsExpected()
+	public void RemoveAsync_CorId_4TransactionsExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -434,7 +434,7 @@ public class TransactionServiceTests
 		}
 	}
 	[Fact]
-	public void RemoveTransactionAsync_IncorId_AggregateExceptionExpected()
+	public void RemoveAsync_IncorId_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 

@@ -7,7 +7,7 @@ using FinanceManager.DAL.DTO.Operation;
 public class OperationServiceTests
 {
 	[Fact]
-	public void AddOperationAsync_NameIsUnique_5OperationsExpected()
+	public void AddAsync_NameIsUnique_5OperationsExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -33,7 +33,7 @@ public class OperationServiceTests
 		}
 	}
 	[Fact]
-	public void AddOperationAsync_NameIsNotUnique_AggregateExceptionExpected()
+	public void AddAsync_NameIsNotUnique_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -54,7 +54,7 @@ public class OperationServiceTests
 		}
 	}
     [Fact]
-    public void AddOperationAsync_NullArg_AggregateExceptionExpected()
+    public void AddAsync_NullArg_AggregateExceptionExpected()
     {
         var dbCreator = new TestDBCreator();
 
@@ -74,7 +74,7 @@ public class OperationServiceTests
         }
     }
     [Fact]
-    public void AddOperationAsync_EmptyName_AggregateExceptionExpected()
+    public void AddAsync_EmptyName_AggregateExceptionExpected()
     {
         var dbCreator = new TestDBCreator();
 
@@ -96,7 +96,7 @@ public class OperationServiceTests
     }
 
     [Fact]
-	public void EditOperationAsync_CorArgs_ChangedOperationExpected()
+	public void EditAsync_CorArgs_ChangedOperationExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -127,7 +127,7 @@ public class OperationServiceTests
 		}
 	}
 	[Fact]
-	public void EditOperationAsync_NameIsNotUnique_AggregateExceptionExpected()
+	public void EditAsync_NameIsNotUnique_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -155,7 +155,7 @@ public class OperationServiceTests
 		}
 	}
     [Fact]
-    public void EditOperationAsync_NameIsEmpty_AggregateExceptionExpected()
+    public void EditAsync_NameIsEmpty_AggregateExceptionExpected()
     {
         var dbCreator = new TestDBCreator();
 
@@ -183,7 +183,7 @@ public class OperationServiceTests
         }
     }
     [Fact]
-	public void EditOperationAsync_IdIsNotExist_AggregateExceptionExpected()
+	public void EditAsync_IdIsNotExist_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -236,7 +236,7 @@ public class OperationServiceTests
 	}
 
 	[Fact]
-	public void GetOperationAsync_CorId_RequiredOperationExpected()
+	public void GetAsync_CorId_RequiredOperationExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -262,7 +262,7 @@ public class OperationServiceTests
 		}
 	}
     [Fact]
-    public void GetOperationAsync_CorName_RequiredOperationExpected()
+    public void GetAsync_CorName_RequiredOperationExpected()
     {
         var dbCreator = new TestDBCreator();
 
@@ -288,7 +288,7 @@ public class OperationServiceTests
         }
     }
     [Fact]
-	public void GetOperationAsync_IncorId_NullExpected()
+	public void GetAsync_IncorId_NullExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -311,7 +311,7 @@ public class OperationServiceTests
 		}
 	}
     [Fact]
-    public void GetOperationAsync_IncorName_NullExpected()
+    public void GetAsync_IncorName_NullExpected()
     {
         var dbCreator = new TestDBCreator();
 
@@ -335,7 +335,7 @@ public class OperationServiceTests
     }
 
     [Fact]
-	public void RemoveOperationAsync_OperationWithoutTransaction_3OperationsExpected()
+	public void RemoveAsync_OperationWithoutTransaction_3OperationsExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -361,7 +361,7 @@ public class OperationServiceTests
 		}
 	}
 	[Fact]
-	public void RemoveOperationAsync_OperationWithTransaction_AggregateExceptionExpected()
+	public void RemoveAsync_OperationWithTransaction_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
@@ -384,7 +384,7 @@ public class OperationServiceTests
 		}
 	}
 	[Fact]
-	public void RemoveOperationAsync_IncorId_AggregateExceptionExpected()
+	public void RemoveAsync_IncorId_AggregateExceptionExpected()
 	{
 		var dbCreator = new TestDBCreator();
 
