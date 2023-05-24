@@ -24,7 +24,7 @@ public class OperationsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync(int id)
+    public async Task<IActionResult> GetAsync([FromRoute] int id)
     {
         OperationViewModel operationVM = await _operationService.GetAsync(id);
 
@@ -33,7 +33,7 @@ public class OperationsController : ControllerBase
             return NotFound(new { message = "Operation not found" });
         }
 
-        return new ObjectResult(operationVM);
+        return Ok(operationVM);
     }
 
     [HttpPost]
@@ -59,7 +59,7 @@ public class OperationsController : ControllerBase
             await _operationService.EditAsync(operationUpdateDto);
             var editedOperationVM = await _operationService.GetAsync(operationUpdateDto.Id);
 
-            return new ObjectResult(editedOperationVM);
+            return Ok(editedOperationVM);
         }
         catch (ArgumentException ex)
         {
@@ -68,14 +68,14 @@ public class OperationsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAsync(int id)
+    public async Task<IActionResult> DeleteAsync([FromRoute] int id)
     {
         try
         {
             var removedOperationVM = await _operationService.GetAsync(id);
             await _operationService.RemoveAsync(id);
 
-            return new ObjectResult(removedOperationVM);
+            return Ok(removedOperationVM);
         }
         catch (InvalidOperationException ex)
         {

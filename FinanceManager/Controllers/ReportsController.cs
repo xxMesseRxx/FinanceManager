@@ -16,14 +16,15 @@ public class ReportsController : ControllerBase
         _reportService = reportService;
     }
 
-    [HttpGet("{date}")]
-    public async Task<DailyReport> DailyReportAsync(DateTime date)
+    [HttpGet]
+    public async Task<DailyReport> DailyReportAsync([FromQuery] DateTime date)
     {
         return await _reportService.GetDailyReportAsync(DateOnly.FromDateTime(date));
     }
 
-    [HttpGet("{startDate}-{endDate}")]
-    public async Task<PeriodReport> PeriodReportAsync(DateTime startDate, DateTime endDate)
+    [HttpGet]
+    public async Task<PeriodReport> PeriodReportAsync([FromQuery] DateTime startDate,
+                                                      [FromQuery] DateTime endDate)
     {
         return await _reportService.GetPeriodReportAsync(DateOnly.FromDateTime(startDate),
                                                          DateOnly.FromDateTime(endDate));

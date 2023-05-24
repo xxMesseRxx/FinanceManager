@@ -24,7 +24,7 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync(int id)
+    public async Task<IActionResult> GetAsync([FromRoute] int id)
     {
         TransactionViewModel transactionVM = await _transactionService.GetAsync(id);
 
@@ -33,7 +33,7 @@ public class TransactionsController : ControllerBase
             return NotFound(new { message = "Transaction not found" });
         }
 
-        return new ObjectResult(transactionVM);
+        return Ok(transactionVM);
     }
 
     [HttpPost]
@@ -59,7 +59,7 @@ public class TransactionsController : ControllerBase
             await _transactionService.EditAsync(transactionUpdateDto);
             var editedTransactionVM = await _transactionService.GetAsync(transactionUpdateDto.Id);
 
-            return new ObjectResult(editedTransactionVM);
+            return Ok(editedTransactionVM);
         }
         catch (ArgumentException ex)
         {
@@ -68,14 +68,14 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAsync(int id)
+    public async Task<IActionResult> DeleteAsync([FromRoute] int id)
     {
         try
         {
             var removedTransactionVM = await _transactionService.GetAsync(id);
             await _transactionService.RemoveAsync(id);
 
-            return new ObjectResult(removedTransactionVM);
+            return Ok(removedTransactionVM);
         }
         catch (ArgumentException ex)
         {
