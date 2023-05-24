@@ -84,11 +84,11 @@ public class TransactionServiceTests
 			TransactionService transactionService = servicesGreator.GetTransactionService();
 			OperationService operationService = servicesGreator.GetOperationService();
 			List<OperationViewModel> operationsViewModel = operationService.GetAllAsync().Result;
-			List<Transaction> transactions = transactionService.GetAllAsync().Result;
+			List<TransactionViewModel> transactionsViewModel = transactionService.GetAllAsync().Result;
 
 			TransactionUpdateDto transactionUpdateDto = new TransactionUpdateDto()
 			{
-				Id = transactions[0].Id,
+				Id = transactionsViewModel[0].Id,
 				Sum = 50001,
 				DateTime = DateTime.Now,
 				Discription = "New",
@@ -97,7 +97,7 @@ public class TransactionServiceTests
 
 			//Act
 			transactionService.EditAsync(transactionUpdateDto).Wait();
-			Transaction result = transactionService.GetAsync(transactionUpdateDto.Id).Result;
+			TransactionViewModel result = transactionService.GetAsync(transactionUpdateDto.Id).Result;
 
 			//Assert
 			Assert.Equal(transactionUpdateDto.Discription, result.Discription);
@@ -118,7 +118,7 @@ public class TransactionServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			TransactionService transactionService = servicesGreator.GetTransactionService();
-			List<Transaction> transactions = transactionService.GetAllAsync().Result;
+			List<TransactionViewModel> transactionsViewModel = transactionService.GetAllAsync().Result;
 
             TransactionUpdateDto transactionUpdateDto = new TransactionUpdateDto()
             {
@@ -126,7 +126,7 @@ public class TransactionServiceTests
                 Sum = 50001,
                 DateTime = DateTime.Now,
                 Discription = "New",
-                OperationId = transactions[0].OperationId
+                OperationId = transactionsViewModel[0].OperationId
             };
 
             //Act
@@ -150,11 +150,11 @@ public class TransactionServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			TransactionService transactionService = servicesGreator.GetTransactionService();
-			List<Transaction> transactions = transactionService.GetAllAsync().Result;
+			List<TransactionViewModel> transactionsViewModel = transactionService.GetAllAsync().Result;
 
             TransactionUpdateDto transactionUpdateDto = new TransactionUpdateDto()
             {
-                Id = transactions[0].Id,
+                Id = transactionsViewModel[0].Id,
                 Sum = 50001,
                 DateTime = DateTime.Now,
                 Discription = "New",
@@ -208,8 +208,8 @@ public class TransactionServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			TransactionService transactionService = servicesGreator.GetTransactionService();
-			List<Transaction> transactions = transactionService.GetAllAsync().Result;
-			var expectedTransaction = transactions[2];
+			List<TransactionViewModel> transactionsViewModel = transactionService.GetAllAsync().Result;
+			var expectedTransaction = transactionsViewModel[2];
 
 			//Act
 			var result = transactionService.GetAsync(expectedTransaction.Id).Result;
@@ -418,11 +418,11 @@ public class TransactionServiceTests
 			dbCreator.CreateTestDB();
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			TransactionService transactionService = servicesGreator.GetTransactionService();
-			List<Transaction> transactions = transactionService.GetAllAsync().Result;
+			List<TransactionViewModel> transactionsViewModel = transactionService.GetAllAsync().Result;
 			int expected = 4;
 
 			//Act
-			transactionService.RemoveAsync(transactions[0].Id).Wait();
+			transactionService.RemoveAsync(transactionsViewModel[0].Id).Wait();
 			int result = transactionService.GetAllAsync().Result.Count;
 
 			//Assert

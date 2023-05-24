@@ -18,7 +18,7 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<Transaction>> GetAsync()
+    public async Task<List<TransactionViewModel>> GetAsync()
     {
         return await _transactionService.GetAllAsync();
     }
@@ -26,14 +26,14 @@ public class TransactionsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAsync(int id)
     {
-        Transaction transaction = await _transactionService.GetAsync(id);
+        TransactionViewModel transactionVM = await _transactionService.GetAsync(id);
 
-        if (transaction is null)
+        if (transactionVM is null)
         {
             return NotFound(new { message = "Transaction not found" });
         }
 
-        return new ObjectResult(transaction);
+        return new ObjectResult(transactionVM);
     }
 
     [HttpPost]
@@ -57,9 +57,9 @@ public class TransactionsController : ControllerBase
         try
         {
             await _transactionService.EditAsync(transactionUpdateDto);
-            var editedTransaction = await _transactionService.GetAsync(transactionUpdateDto.Id);
+            var editedTransactionVM = await _transactionService.GetAsync(transactionUpdateDto.Id);
 
-            return new ObjectResult(editedTransaction);
+            return new ObjectResult(editedTransactionVM);
         }
         catch (ArgumentException ex)
         {
@@ -72,10 +72,10 @@ public class TransactionsController : ControllerBase
     {
         try
         {
-            var removedTransaction = await _transactionService.GetAsync(id);
+            var removedTransactionVM = await _transactionService.GetAsync(id);
             await _transactionService.RemoveAsync(id);
 
-            return new ObjectResult(removedTransaction);
+            return new ObjectResult(removedTransactionVM);
         }
         catch (ArgumentException ex)
         {

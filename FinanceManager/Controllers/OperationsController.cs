@@ -77,7 +77,7 @@ public class OperationsController : ControllerBase
 
             return new ObjectResult(removedOperationVM);
         }
-        catch (ArgumentException ex)
+        catch (InvalidOperationException ex)
         {
             return BadRequest(new { message = ex.Message });
         }

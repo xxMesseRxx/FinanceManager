@@ -22,7 +22,7 @@ public class ReportServiceTests
 
             //Act
             Report report = reportService.GetDailyReportAsync(date).Result;
-            int actual = report.Transactions.Count;
+            int actual = report.TransactionsVM.Count;
 
             //Assert
             Assert.Equal(expectedTransactionsCount, actual);
@@ -48,7 +48,7 @@ public class ReportServiceTests
 
             //Act
             Report report = reportService.GetDailyReportAsync(date).Result;
-            int actual = report.Transactions.Count;
+            int actual = report.TransactionsVM.Count;
 
             //Assert
             Assert.Equal(expectedTransactionsCount, actual);
@@ -75,7 +75,7 @@ public class ReportServiceTests
 
             //Act
             Report report = reportService.GetPeriodReportAsync(startDate, endDate).Result;
-            int actual = report.Transactions.Count;
+            int actual = report.TransactionsVM.Count;
 
             //Assert
             Assert.Equal(expectedTransactionsCount, actual);
@@ -102,7 +102,7 @@ public class ReportServiceTests
 
             //Act
             Report report = reportService.GetPeriodReportAsync(startDate, endDate).Result;
-            int actual = report.Transactions.Count;
+            int actual = report.TransactionsVM.Count;
 
             //Assert
             Assert.Equal(expectedTransactionsCount, actual);

@@ -1,18 +1,19 @@
 ﻿namespace FinanceManager.Library;
 
+using FinanceManager.DAL.DTO.Transaction;
 using FinanceManager.Model;
 
 public abstract class Report
 {
-    public List<Transaction> Transactions 
+    public List<TransactionViewModel> TransactionsVM 
     {
         get
         {
-            return _transactions;
+            return _transactionsVM;
         }
         protected set
         {
-            _transactions = value;
+            _transactionsVM = value;
             CountTotalExpenses();
             CountTotalIncome();
         }
@@ -20,16 +21,16 @@ public abstract class Report
     public int TotalIncome { get; protected set; }
     public int TotalExpenses { get; protected set; }
 
-    private List<Transaction> _transactions;
+    private List<TransactionViewModel> _transactionsVM;
 
     protected void CountTotalIncome()
     {
-        TotalIncome = Transactions.Where(t => t.Sum > 0)
-                                  .Sum(t => t.Sum);   
+        TotalIncome = TransactionsVM.Where(t => t.Sum > 0)
+                                    .Sum(t => t.Sum);   
     }
     protected void CountTotalExpenses()
     {
-        TotalExpenses = Transactions.Where(t => t.Sum < 0)
-                                    .Sum(t => t.Sum);
+        TotalExpenses = TransactionsVM.Where(t => t.Sum < 0)
+                                      .Sum(t => t.Sum);
     }
 }
