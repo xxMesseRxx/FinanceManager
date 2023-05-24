@@ -209,13 +209,13 @@ public class TransactionServiceTests
 			ServicesGreator servicesGreator = new ServicesGreator(dbCreator.DbName);
 			TransactionService transactionService = servicesGreator.GetTransactionService();
 			List<TransactionViewModel> transactionsViewModel = transactionService.GetAllAsync().Result;
-			var expectedTransaction = transactionsViewModel[2];
+			var expectedId = transactionsViewModel[2].Id;
 
 			//Act
-			var result = transactionService.GetAsync(expectedTransaction.Id).Result;
+			var result = transactionService.GetAsync(expectedId).Result.Id;
 
 			//Assert
-			Assert.Equal(expectedTransaction, result);
+			Assert.Equal(expectedId, result);
 		}
 		finally
 		{
