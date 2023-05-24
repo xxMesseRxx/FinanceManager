@@ -1,6 +1,6 @@
 ﻿namespace FinanceManager.Services;
 
-using FinanceManager.DAL;
+using FinanceManager.DAL.DTO.Reports;
 using FinanceManager.Library.Interfaces;
 using System.Threading.Tasks;
 

@@ -1,4 +1,4 @@
-﻿namespace FinanceManager.DAL;
+﻿namespace FinanceManager.DAL.DTO.Reports;
 
 using FinanceManager.DAL.DTO.Transaction;
 using FinanceManager.Library;

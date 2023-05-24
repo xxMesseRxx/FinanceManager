@@ -1,6 +1,6 @@
 ﻿namespace FinanceManager.Library.Interfaces;
 
-using FinanceManager.DAL;
+using FinanceManager.DAL.DTO.Reports;
 
 public interface IReportService
 {
