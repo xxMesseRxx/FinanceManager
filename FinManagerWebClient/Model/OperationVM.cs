@@ -1,6 +1,6 @@
 ﻿namespace FinManagerWebClient.Model;
 
-public class Operation
+public class OperationVM
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;
