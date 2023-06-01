@@ -14,14 +14,32 @@
             @foreach (var o in operations)
             {
                 <tr>
-                    <td>@o.Id</td><td>@o.Name</td>
+                    <td>@o.Id</td><td>@o.Name</td><td><a>Изменить</a><a>Удалить</a></td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
 
+<div>
+    <EditForm Model="operation">
+        <div>
+            <label>Id:</label><br />
+            <InputNumber @bind-Value="operation.Id" tabindex="-1" readonly />
+        </div>
+        <div>
+            <label>Name:</label><br />
+            <InputText @bind-Value="operation.Name" tabindex="-1" />
+        </div>
+        <div>
+            <button>Добавить</button>
+            <button>Сбросить</button>
+        </div>
+    </EditForm>
+</div>
+
 @code {
+    OperationVM operation = new OperationVM();
     List<OperationVM> operations = new List<OperationVM>();
 
     protected override async Task OnInitializedAsync()
