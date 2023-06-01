@@ -1,0 +1,32 @@
+﻿@page "/operations"
+@inject IOperationRequests operationRequests
+
+<PageTitle>Operations</PageTitle>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th><th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var o in operations)
+            {
+                <tr>
+                    <td>@o.Id</td><td>@o.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    List<OperationVM> operations = new List<OperationVM>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        operations = await operationRequests.GetAsync();
+        base.OnInitialized();
+    }
+}

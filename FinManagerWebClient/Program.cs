@@ -8,6 +8,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ITransactionRequests, TransactionRequests>();
+builder.Services.AddScoped<IOperationRequests, OperationRequests>();
 
 var app = builder.Build();
 
