@@ -1,0 +1,56 @@
+﻿@page "/"
+@page "/transactions"
+@inject ITransactionRequests transactionRequests
+
+
+<PageTitle>Transactions</PageTitle>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th><th>Operation name</th><th>Sum</th><th>Date and time</th><th>Discription</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in transactions)
+            {
+                <tr>
+                    <td>@t.Id</td><td>@t.OperationVM.Name</td><td>@(string.Format("{0:F}", t.Sum / 100))</td>
+                    <td>@t.DateTime.ToString()</td><td>@t.Discription</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <EditForm Model="transaction">
+        <div>
+            <label>Id:</label><br />
+            <InputNumber @bind-Value="transaction.Id" tabindex="-1" readonly />
+        </div>
+        <div>
+            <label>Operation name:</label><br />
+            <InputSelect @bind-Value="transaction.OperationId">
+                <option value="3">Number3</option>
+                <option value="5">Number5</option>
+            </InputSelect>
+        </div>
+    </EditForm>
+
+</div>
+
+
+@code {
+    TransactionVM transaction = new TransactionVM() {OperationId = 5};
+    List<TransactionVM> transactions = new List<TransactionVM>();
+    List<OperationVM> operations = new List<OperationVM>() { new OperationVM { Id = 1, Name = "bol" },
+                                                             new OperationVM { Id = 2, Name = "dfgg" }};
+
+    protected override async Task OnInitializedAsync()
+    {
+        transactions = await transactionRequests.GetAsync();
+        base.OnInitialized();
+    }
+}

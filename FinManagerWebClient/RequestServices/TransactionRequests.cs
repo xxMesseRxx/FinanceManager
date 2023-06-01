@@ -23,9 +23,9 @@ public class TransactionRequests : ITransactionRequests
         _httpClient = httpClientFactory.CreateClient();
     }
 
-    public Task CreateAsync(TransactionCreateDto transactionCreateDto)
+    public async Task CreateAsync(TransactionVM transaction)
     {
-        throw new NotImplementedException();
+        await _httpClient.PostAsJsonAsync<TransactionVM>(_baseUrl, transaction);
     }
 
     public async Task<List<TransactionVM>> GetAsync()

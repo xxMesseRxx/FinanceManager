@@ -6,7 +6,7 @@ using FinManagerWebClient.Model;
 public interface ITransactionRequests
 {
     public Task<List<TransactionVM>> GetAsync();
-    public Task CreateAsync(TransactionCreateDto transactionCreateDto);
+    public Task CreateAsync(TransactionVM transaction);
     public Task<TransactionVM> UpdateAsync(TransactionUpdateDto transactionUpdateDto);
     public Task<TransactionVM> RemoveAsync(int id);
 }

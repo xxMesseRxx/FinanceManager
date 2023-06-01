@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceManager", "FinanceMa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceManager.Tests", "FinanceManager.Tests\FinanceManager.Tests.csproj", "{660879FE-E5BD-4428-80F2-B928E6092881}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinManagerWebClient", "FinManagerWebClient\FinManagerWebClient.csproj", "{2E8410F5-EC75-4D30-818C-95C7AC4C2B9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinManagerWebClient", "FinManagerWebClient\FinManagerWebClient.csproj", "{2E8410F5-EC75-4D30-818C-95C7AC4C2B9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
