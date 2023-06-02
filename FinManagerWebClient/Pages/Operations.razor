@@ -1,5 +1,7 @@
 ﻿@page "/operations"
+@using FinManagerWebClient.DTO.Operation
 @inject IOperationRequests operationRequests
+@inject IJSRuntime jsRuntime
 
 <PageTitle>Operations</PageTitle>
 
@@ -14,7 +16,12 @@
             @foreach (var o in operations)
             {
                 <tr>
-                    <td>@o.Id</td><td>@o.Name</td><td><a>Изменить</a><a>Удалить</a></td>
+                    <td>@o.Id</td>
+                    <td>@o.Name</td>
+                    <td>
+                        <a @onclick="() => EditRow(o)">Изменить</a>
+                        <a @onclick="() => RemoveRow(o)">Удалить</a>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -22,7 +29,7 @@
 </div>
 
 <div>
-    <EditForm Model="operation">
+    <EditForm Model="operation" OnSubmit="Submit">
         <div>
             <label>Id:</label><br />
             <InputNumber @bind-Value="operation.Id" tabindex="-1" readonly />
@@ -32,8 +39,8 @@
             <InputText @bind-Value="operation.Name" tabindex="-1" />
         </div>
         <div>
-            <button>Добавить</button>
-            <button>Сбросить</button>
+            <button type="submit">@submitBtnText</button>
+            <button type="button" @onclick="ResetForm">Сбросить</button>
         </div>
     </EditForm>
 </div>
@@ -41,10 +48,101 @@
 @code {
     OperationVM operation = new OperationVM();
     List<OperationVM> operations = new List<OperationVM>();
+    string submitBtnText = "Добавить";
 
     protected override async Task OnInitializedAsync()
     {
-        operations = await operationRequests.GetAsync();
+        await LoadOperationsAsync();
         base.OnInitialized();
+    }
+
+    void EditRow(OperationVM o)
+    {
+        operation.Id = o.Id;
+        operation.Name = o.Name;
+
+        submitBtnText = "Сохранить";
+    }
+
+    async Task RemoveRow(OperationVM o)
+    {
+        try
+        {
+            await operationRequests.RemoveAsync(o.Id);
+        }
+        catch (InvalidOperationException ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+
+        await LoadOperationsAsync();
+    }
+
+    async Task Submit()
+    {
+        if (operation.Id == 0)
+        {
+            await CreateAsync();
+            return;
+        }
+
+        await UpdateAsync();
+    }
+
+
+    private async Task LoadOperationsAsync()
+    {
+        operations = await operationRequests.GetAsync();
+    }
+
+    private async Task CreateAsync()
+    {
+        OperationCreateDto operationCreateDto = new OperationCreateDto()
+        {
+            Name = operation.Name
+        };
+
+        try
+        {
+            await operationRequests.CreateAsync(operationCreateDto);
+        }
+        catch (InvalidOperationException ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+
+        ResetForm();
+
+        await LoadOperationsAsync();
+    }
+
+    private async Task UpdateAsync()
+    {
+        OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
+        {
+            Id = operation.Id,
+            Name = operation.Name
+        };
+
+        try
+        {
+            await operationRequests.UpdateAsync(operationUpdateDto);      
+        }
+        catch (InvalidOperationException ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+
+        ResetForm();
+
+        await LoadOperationsAsync();
+    }
+
+    private void ResetForm()
+    {
+        operation.Name = "";
+        operation.Id = 0;
+
+        submitBtnText = "Добавить";
     }
 }
