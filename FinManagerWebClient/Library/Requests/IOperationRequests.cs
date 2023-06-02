@@ -1,12 +1,12 @@
 ﻿namespace FinManagerWebClient.Library.Requests;
 
-using FinManagerWebClient.DTO;
+using FinManagerWebClient.DTO.Operation;
 using FinManagerWebClient.Model;
 
 public interface IOperationRequests
 {
     public Task<List<OperationVM>> GetAsync();
-    public Task CreateAsync(OperationVM operation);
-    public Task<OperationVM> UpdateAsync(OperationVM operation);
+    public Task CreateAsync(OperationCreateDto operationCreateDto);
+    public Task<OperationVM> UpdateAsync(OperationUpdateDto operationUpdateDto);
     public Task<OperationVM> RemoveAsync(int id);
 }
