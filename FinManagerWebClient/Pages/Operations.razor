@@ -1,5 +1,6 @@
 ﻿@page "/operations"
 @using FinManagerWebClient.DTO.Operation
+@using FinManagerWebClient.Components.Operations
 @inject IOperationRequests operationRequests
 @inject IJSRuntime jsRuntime
 
@@ -28,22 +29,9 @@
     </table>
 </div>
 
-<div>
-    <EditForm Model="operation" OnSubmit="Submit">
-        <div>
-            <label>Id:</label><br />
-            <InputNumber @bind-Value="operation.Id" tabindex="-1" readonly />
-        </div>
-        <div>
-            <label>Name:</label><br />
-            <InputText @bind-Value="operation.Name" tabindex="-1" />
-        </div>
-        <div>
-            <button type="submit">@submitBtnText</button>
-            <button type="button" @onclick="ResetForm">Сбросить</button>
-        </div>
-    </EditForm>
-</div>
+<OperationForm OperationsWereChangedCallback="@LoadOperationsAsync"
+               Operation="@operation"
+               @bind-SubmitBtnText="submitBtnText"/>
 
 @code {
     OperationVM operation = new OperationVM();
@@ -78,71 +66,8 @@
         await LoadOperationsAsync();
     }
 
-    async Task Submit()
-    {
-        if (operation.Id == 0)
-        {
-            await CreateAsync();
-            return;
-        }
-
-        await UpdateAsync();
-    }
-
-
     private async Task LoadOperationsAsync()
     {
         operations = await operationRequests.GetAsync();
-    }
-
-    private async Task CreateAsync()
-    {
-        OperationCreateDto operationCreateDto = new OperationCreateDto()
-        {
-            Name = operation.Name
-        };
-
-        try
-        {
-            await operationRequests.CreateAsync(operationCreateDto);
-        }
-        catch (InvalidOperationException ex)
-        {
-            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
-        }
-
-        ResetForm();
-
-        await LoadOperationsAsync();
-    }
-
-    private async Task UpdateAsync()
-    {
-        OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
-        {
-            Id = operation.Id,
-            Name = operation.Name
-        };
-
-        try
-        {
-            await operationRequests.UpdateAsync(operationUpdateDto);      
-        }
-        catch (InvalidOperationException ex)
-        {
-            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
-        }
-
-        ResetForm();
-
-        await LoadOperationsAsync();
-    }
-
-    private void ResetForm()
-    {
-        operation.Name = "";
-        operation.Id = 0;
-
-        submitBtnText = "Добавить";
     }
 }
