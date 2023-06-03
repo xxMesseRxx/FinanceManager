@@ -1,9 +1,10 @@
 ﻿namespace FinManagerWebClient.RequestServices;
 
-using FinManagerWebClient.DTO;
+using FinManagerWebClient.DTO.Transaction;
 using FinManagerWebClient.Library.Requests;
 using FinManagerWebClient.Model;
 using System.Collections.Generic;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 public class TransactionRequests : ITransactionRequests
@@ -23,9 +24,11 @@ public class TransactionRequests : ITransactionRequests
         _httpClient = httpClientFactory.CreateClient();
     }
 
-    public async Task CreateAsync(TransactionVM transaction)
+    public async Task CreateAsync(TransactionCreateDto transactionCreateDto)
     {
-        await _httpClient.PostAsJsonAsync<TransactionVM>(_baseUrl, transaction);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync<TransactionCreateDto>(_baseUrl, transactionCreateDto);
+
+        await CheckSuccessCode(response);
     }
 
     public async Task<List<TransactionVM>> GetAsync()
@@ -33,13 +36,30 @@ public class TransactionRequests : ITransactionRequests
         return await _httpClient.GetFromJsonAsync<List<TransactionVM>>(_baseUrl);
     }
 
-    public Task<TransactionVM> RemoveAsync(int id)
+    public async Task<TransactionVM> RemoveAsync(int id)
     {
-        throw new NotImplementedException();
+        HttpResponseMessage response = await _httpClient.DeleteAsync(_baseUrl + "/" + id);
+
+        CheckSuccessCode(response);
+
+        return await response.Content.ReadFromJsonAsync<TransactionVM>();
     }
 
-    public Task<TransactionVM> UpdateAsync(TransactionUpdateDto transactionUpdateDto)
+    public async Task<TransactionVM> UpdateAsync(TransactionUpdateDto transactionUpdateDto)
     {
-        throw new NotImplementedException();
+        HttpResponseMessage response = await _httpClient.PutAsJsonAsync<TransactionUpdateDto>(_baseUrl, transactionUpdateDto);
+
+        CheckSuccessCode(response);
+
+        return await response.Content.ReadFromJsonAsync<TransactionVM>();
+    }
+
+    private async Task CheckSuccessCode(HttpResponseMessage response)
+    {
+        if (!response.IsSuccessStatusCode)
+        {
+            string msg = await response.Content.ReadAsStringAsync();
+            throw new InvalidOperationException(msg);
+        }
     }
 }
