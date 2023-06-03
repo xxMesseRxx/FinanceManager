@@ -1,0 +1,23 @@
+﻿<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th><th>Operation name</th><th>Sum</th><th>Date and time</th><th>Discription</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Transactions)
+            {
+                <tr>
+                    <td>@t.Id</td><td>@t.OperationVM.Name</td><td>@(string.Format("{0:F}", t.Sum / 100))</td>
+                    <td>@t.DateTime.ToString()</td><td>@t.Discription</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public List<TransactionVM> Transactions { get; set; } = new List<TransactionVM>();
+}
