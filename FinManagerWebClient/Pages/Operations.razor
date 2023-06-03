@@ -6,31 +6,12 @@
 
 <PageTitle>Operations</PageTitle>
 
-<div>
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th><th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var o in operations)
-            {
-                <tr>
-                    <td>@o.Id</td>
-                    <td>@o.Name</td>
-                    <td>
-                        <a @onclick="() => EditRow(o)">Изменить</a>
-                        <a @onclick="() => RemoveRow(o)">Удалить</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+<OperationsTable Operations="@operations"
+                 OperationWasRemovedCallback="@LoadOperationsAsync"
+                 EditingRowWasChosenCallback="@EditRow"/>
 
-<OperationForm OperationsWereChangedCallback="@LoadOperationsAsync"
-               Operation="@operation"
+<OperationForm Operation="@operation"
+               OperationsWereChangedCallback="@LoadOperationsAsync"
                @bind-SubmitBtnText="submitBtnText"/>
 
 @code {
@@ -50,20 +31,6 @@
         operation.Name = o.Name;
 
         submitBtnText = "Сохранить";
-    }
-
-    async Task RemoveRow(OperationVM o)
-    {
-        try
-        {
-            await operationRequests.RemoveAsync(o.Id);
-        }
-        catch (InvalidOperationException ex)
-        {
-            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
-        }
-
-        await LoadOperationsAsync();
     }
 
     private async Task LoadOperationsAsync()
