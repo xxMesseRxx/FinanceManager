@@ -1,0 +1,57 @@
+﻿@page "/dailyReports"
+@using FinManagerWebClient.DTO.Reports
+@inject IReportsRequests reportsRequests
+
+<div>
+    <InputDate @bind-Value="dailyReport.Date" @onblur="DateWasUpdatedAsync"/>
+</div>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th><th>Operation name</th><th>Sum</th><th>Date</th><th>Time</th><th>Discription</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in dailyReport.TransactionsVM)
+            {
+                <tr>
+                    <td>@t.Id</td>
+                    <td>@t.OperationVM.Name</td>
+                    <td>@(string.Format("{0:F}", t.Sum / 100))</td>
+                    <td>@t.DateTime.ToShortDateString()</td>
+                    <td>@t.DateTime.ToShortTimeString()</td>
+                    <td>@t.Discription</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    DailyReport dailyReport = new DailyReport()
+    {
+            TransactionsVM = new List<TransactionVM>()
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDailyReportAsync(DateTime.Now);
+        base.OnInitialized();
+    }
+
+    async Task DateWasUpdatedAsync()
+    {
+        await LoadDailyReportAsync(dailyReport.Date);
+    }
+
+    private async Task LoadDailyReportAsync(DateTime date)
+    {
+        if (new DateTime(1900, 01, 01) <= date &&
+            DateTime.Now >= date)
+        {
+            dailyReport = await reportsRequests.GetDailyReportAsync(date);
+        }
+    }
+}

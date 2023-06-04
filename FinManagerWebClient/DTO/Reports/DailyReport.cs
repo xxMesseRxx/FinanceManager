@@ -4,5 +4,5 @@ using FinManagerWebClient.Library;
 
 public class DailyReport : Report
 {
-    public DateOnly Date { get; set; }
+    public DateTime Date { get; set; }
 }
