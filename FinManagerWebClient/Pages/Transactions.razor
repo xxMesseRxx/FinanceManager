@@ -1,56 +1,43 @@
 ﻿@page "/"
 @page "/transactions"
+@using FinManagerWebClient.Components.Transactions
 @inject ITransactionRequests transactionRequests
 
 
 <PageTitle>Transactions</PageTitle>
 
-<div>
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th><th>Operation name</th><th>Sum</th><th>Date and time</th><th>Discription</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var t in transactions)
-            {
-                <tr>
-                    <td>@t.Id</td><td>@t.OperationVM.Name</td><td>@(string.Format("{0:F}", t.Sum / 100))</td>
-                    <td>@t.DateTime.ToString()</td><td>@t.Discription</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+<TransactionsTable Transactions="@transactions"
+                   TransactionWasRemovedCallback="LoadTransactionsAsync"
+                   EditingRowWasChosenCallback="EditRow"/>
 
-<div>
-    <EditForm Model="transaction">
-        <div>
-            <label>Id:</label><br />
-            <InputNumber @bind-Value="transaction.Id" tabindex="-1" readonly />
-        </div>
-        <div>
-            <label>Operation name:</label><br />
-            <InputSelect @bind-Value="transaction.OperationId">
-                <option value="3">Number3</option>
-                <option value="5">Number5</option>
-            </InputSelect>
-        </div>
-    </EditForm>
-
-</div>
-
+<TransactionForm Transaction="@transaction"
+                 TransactionsWereChangedCallback="@LoadTransactionsAsync"
+                 @bind-SubmitBtnText="submitBtnText"/>
 
 @code {
-    TransactionVM transaction = new TransactionVM() {OperationId = 5};
+    TransactionVM transaction = new TransactionVM() { DateTime = DateTime.Now };
     List<TransactionVM> transactions = new List<TransactionVM>();
-    List<OperationVM> operations = new List<OperationVM>() { new OperationVM { Id = 1, Name = "bol" },
-                                                             new OperationVM { Id = 2, Name = "dfgg" }};
+    string submitBtnText = "Добавить";
 
     protected override async Task OnInitializedAsync()
     {
-        transactions = await transactionRequests.GetAsync();
+        await LoadTransactionsAsync();
         base.OnInitialized();
+    }
+
+    void EditRow(TransactionVM t)
+    {
+        transaction.Id = t.Id;
+        transaction.Sum = t.Sum;
+        transaction.DateTime = t.DateTime;
+        transaction.Discription = t.Discription;
+        transaction.OperationId = t.OperationId;
+
+        submitBtnText = "Сохранить";
+    }
+
+    private async Task LoadTransactionsAsync()
+    {
+        transactions = await transactionRequests.GetAsync();
     }
 }
