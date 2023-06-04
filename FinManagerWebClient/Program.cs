@@ -9,6 +9,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ITransactionRequests, TransactionRequests>();
 builder.Services.AddScoped<IOperationRequests, OperationRequests>();
+builder.Services.AddScoped<IReportsRequests, ReportsRequests>();
 
 var app = builder.Build();
 
