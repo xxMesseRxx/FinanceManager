@@ -32,7 +32,7 @@ public class ReportsRequests : IReportsRequests
 
     public async Task<PeriodReport> GetPeriodReportAsync(DateTime startDate, DateTime endDate)
     {
-        return await _httpClient.GetFromJsonAsync<PeriodReport>(_dailyReportUrl + 
+        return await _httpClient.GetFromJsonAsync<PeriodReport>(_periodReportUrl + 
                                                                 $"?startDate={startDate.ToString("yyyy-MM-dd")}" +
                                                                 $"&endDate={endDate.ToString("yyyy-MM-dd")}");
     }

@@ -4,6 +4,6 @@ using FinManagerWebClient.Library;
 
 public class PeriodReport : Report
 {
-    public DateOnly StartDate { get; set; }
-    public DateOnly EndDate { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 }

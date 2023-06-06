@@ -1,0 +1,79 @@
+﻿@page "/periodReports"
+@using FinManagerWebClient.DTO.Reports
+@inject IReportsRequests reportsRequests
+
+<div>
+    <div>
+        <label>Select start date: </label>
+        <InputDate @bind-Value="periodReport.StartDate" @onblur="LoadPeriodReportAsync"/>
+    </div>
+    <div>
+        <label>Select end date: </label>
+        <InputDate @bind-Value="periodReport.EndDate" @onblur="LoadPeriodReportAsync"/>
+    </div>
+    <div>
+        <p>Total expenses: <output>@(string.Format("{0:F}", periodReport.TotalExpenses / 100))</output></p>
+    </div>
+    <div>
+        <p>Total income: <output>@(string.Format("{0:F}", periodReport.TotalIncome / 100))</output></p>
+    </div>
+</div>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th><th>Operation name</th><th>Sum</th><th>Date</th><th>Time</th><th>Discription</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in periodReport.TransactionsVM)
+            {
+                <tr>
+                    <td>@t.Id</td>
+                    <td>@t.OperationVM.Name</td>
+                    <td>@(string.Format("{0:F}", t.Sum / 100))</td>
+                    <td>@t.DateTime.ToShortDateString()</td>
+                    <td>@t.DateTime.ToShortTimeString()</td>
+                    <td>@t.Discription</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    PeriodReport periodReport = new PeriodReport()
+    {
+            TransactionsVM = new List<TransactionVM>(),
+            StartDate = DateTime.Now.AddMonths(-1),
+            EndDate = DateTime.Now
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPeriodReportAsync();
+        base.OnInitialized();
+    }
+
+    private async Task LoadPeriodReportAsync()
+    {
+        if (DateIsValid(periodReport.StartDate) && DateIsValid(periodReport.EndDate) &&
+            periodReport.EndDate >= periodReport.StartDate)
+        {
+            periodReport = await reportsRequests.GetPeriodReportAsync(periodReport.StartDate,
+                                                                      periodReport.EndDate);
+        }
+    }
+
+    private bool DateIsValid(DateTime date)
+    {
+        if (new DateTime(1900, 01, 01) <= date &&
+            DateTime.Now >= date)
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
