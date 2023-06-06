@@ -12,6 +12,7 @@
         <div>
             <label>Operation name:</label><br />
             <InputSelect @bind-Value="Transaction.OperationId">
+                <option value="0">...</option>
                 @foreach (var o in operations)
                 {
                     <option value="@o.Id">@o.Name</option>

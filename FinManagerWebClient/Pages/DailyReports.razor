@@ -3,7 +3,16 @@
 @inject IReportsRequests reportsRequests
 
 <div>
-    <InputDate @bind-Value="dailyReport.Date" @onblur="DateWasUpdatedAsync"/>
+    <div>
+        <label>Select date: </label>
+        <InputDate @bind-Value="dailyReport.Date" @onblur="LoadDailyReportAsync"/>
+    </div>
+    <div>
+        <p>Total expenses: <output>@(string.Format("{0:F}", dailyReport.TotalExpenses / 100))</output></p>
+    </div>
+    <div>
+        <p>Total income: <output>@(string.Format("{0:F}", dailyReport.TotalIncome / 100))</output></p>
+    </div>
 </div>
 
 <div>
@@ -32,26 +41,22 @@
 @code {
     DailyReport dailyReport = new DailyReport()
     {
-            TransactionsVM = new List<TransactionVM>()
+            TransactionsVM = new List<TransactionVM>(),
+            Date = DateTime.Now
     };
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadDailyReportAsync(DateTime.Now);
+        await LoadDailyReportAsync();
         base.OnInitialized();
     }
 
-    async Task DateWasUpdatedAsync()
+    private async Task LoadDailyReportAsync()
     {
-        await LoadDailyReportAsync(dailyReport.Date);
-    }
-
-    private async Task LoadDailyReportAsync(DateTime date)
-    {
-        if (new DateTime(1900, 01, 01) <= date &&
-            DateTime.Now >= date)
+        if (new DateTime(1900, 01, 01) <= dailyReport.Date &&
+            DateTime.Now >= dailyReport.Date)
         {
-            dailyReport = await reportsRequests.GetDailyReportAsync(date);
+            dailyReport = await reportsRequests.GetDailyReportAsync(dailyReport.Date);
         }
     }
 }
