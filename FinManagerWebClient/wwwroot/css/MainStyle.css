@@ -1,0 +1,84 @@
+﻿body {
+    padding: 0px;
+    margin: 0px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: inherit;
+}
+
+a.nav-bar-link {
+    font-size: 20px;
+    display: block;
+    text-align: left;
+    padding: 15px 15px 15px 5px;
+    margin: 5px 10px;
+}
+
+a.nav-bar-link:hover {
+    background-color: #adf7e3;
+    border-radius: 10px;
+}
+
+.active {
+    background-color: #95f5dd;
+    border-radius: 10px;
+}
+
+.column {
+    float: left;
+    margin: 0px 40px 0px 0px;
+    padding: 20px 0px 0px 0px;
+}
+
+.column.nav-bar {
+    background-color: #c8ffec;
+    height: 100vh;
+    padding: 0px 0px 0px 0px;
+}
+
+.main-lable {
+    font-size: 22px;
+    display: block;
+    padding: 15px;
+    background-color: #00bd8a
+}
+
+.date-table {
+    display: block;
+    overflow: auto;
+    max-height: 800px;
+}
+
+.date-table td, th {
+    text-align: left;
+    max-width: 160px;
+    padding-right: 30px;
+    font-style: italic;
+}
+
+.date-table a {
+    color: #254d93;
+}
+
+.date-table a:hover {
+    cursor: pointer;
+    border-bottom: 1px solid;
+    color: #5a99d7;
+}
+
+.date-table a:active {
+    text-shadow: 1px 1px 0px black;
+}
+
+.income {
+    color: #04bf4d;
+}
+
+.expenses {
+    color: red;
+}
