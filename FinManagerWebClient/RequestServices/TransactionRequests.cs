@@ -38,7 +38,7 @@ public class TransactionRequests : ITransactionRequests
 
     public async Task<TransactionVM> RemoveAsync(int id)
     {
-        HttpResponseMessage response = await _httpClient.DeleteAsync(_baseUrl + "/" + id);
+        HttpResponseMessage response = await _httpClient.DeleteAsync($"{_baseUrl}/{id}");
 
         CheckSuccessCode(response);
 

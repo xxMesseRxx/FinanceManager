@@ -37,7 +37,7 @@ public class OperationRequests : IOperationRequests
 
     public async Task<OperationVM> RemoveAsync(int id)
     {
-        HttpResponseMessage response = await _httpClient.DeleteAsync(_baseUrl +  "/" + id);
+        HttpResponseMessage response = await _httpClient.DeleteAsync($"{_baseUrl}/{id}");
 
         await CheckSuccessCode(response);
 
