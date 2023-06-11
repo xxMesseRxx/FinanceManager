@@ -1,6 +1,6 @@
 ﻿@using FinManagerWebClient.DTO.Transaction
-@inject IOperationRequests operationRequests
-@inject ITransactionRequests transactionRequests
+@inject IOperationService operationService
+@inject ITransactionService transactionService
 @inject IJSRuntime jsRuntime
 
 <div class="column">
@@ -57,7 +57,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        operations = await operationRequests.GetAsync();
+        operations = await operationService.GetAsync();
         base.OnInitialized();
     }
 
@@ -91,7 +91,7 @@
 
         try
         {
-            await transactionRequests.CreateAsync(transactionCreateDto);
+            await transactionService.CreateAsync(transactionCreateDto);
         }
         catch (InvalidOperationException ex)
         {
@@ -116,7 +116,7 @@
 
         try
         {
-            await transactionRequests.UpdateAsync(transactionUpdateDto);
+            await transactionService.UpdateAsync(transactionUpdateDto);
         }
         catch (InvalidOperationException ex)
         {

@@ -1,6 +1,6 @@
 ﻿@page "/dailyReports"
 @using FinManagerWebClient.DTO.Reports
-@inject IReportsRequests reportsRequests
+@inject IReportsService reportsService
 
 <div class="column">
     <div>
@@ -59,7 +59,7 @@
         if (new DateTime(1900, 01, 01) <= dailyReport.Date &&
             DateTime.Now >= dailyReport.Date)
         {
-            dailyReport = await reportsRequests.GetDailyReportAsync(dailyReport.Date);
+            dailyReport = await reportsService.GetDailyReportAsync(dailyReport.Date);
         }
     }
 }

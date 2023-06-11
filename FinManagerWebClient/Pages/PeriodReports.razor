@@ -1,6 +1,6 @@
 ﻿@page "/periodReports"
 @using FinManagerWebClient.DTO.Reports
-@inject IReportsRequests reportsRequests
+@inject IReportsService reportsService
 
 <div class="column">
     <div>
@@ -62,8 +62,8 @@
         if (DateIsValid(periodReport.StartDate) && DateIsValid(periodReport.EndDate) &&
             periodReport.EndDate >= periodReport.StartDate)
         {
-            periodReport = await reportsRequests.GetPeriodReportAsync(periodReport.StartDate,
-                                                                      periodReport.EndDate);
+            periodReport = await reportsService.GetPeriodReportAsync(periodReport.StartDate,
+                                                                     periodReport.EndDate);
         }
     }
 

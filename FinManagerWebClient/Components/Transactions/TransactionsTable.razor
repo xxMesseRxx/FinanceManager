@@ -1,4 +1,4 @@
-﻿@inject ITransactionRequests transactionRequests
+﻿@inject ITransactionService transactionService
 @inject IJSRuntime jsRuntime
 
 <div class="column">
@@ -40,7 +40,7 @@
     {
         try
         {
-            await transactionRequests.RemoveAsync(t.Id);
+            await transactionService.RemoveAsync(t.Id);
         }
         catch (InvalidOperationException ex)
         {

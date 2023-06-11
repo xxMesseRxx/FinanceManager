@@ -5,13 +5,13 @@ using FinManagerWebClient.Library.Requests;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-public class ReportsRequests : IReportsRequests
+public class ReportsService : IReportsService
 {
     private readonly HttpClient _httpClient;
     private readonly string _periodReportUrl;
     private readonly string _dailyReportUrl;
 
-    public ReportsRequests(IHttpClientFactory httpClientFactory)
+    public ReportsService(IHttpClientFactory httpClientFactory)
     {
         IConfiguration config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())

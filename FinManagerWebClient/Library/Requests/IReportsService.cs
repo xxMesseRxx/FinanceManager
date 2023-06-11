@@ -2,7 +2,7 @@
 
 using FinManagerWebClient.DTO.Reports;
 
-public interface IReportsRequests
+public interface IReportsService
 {
     public Task<DailyReport> GetDailyReportAsync(DateTime date);
     public Task<PeriodReport> GetPeriodReportAsync(DateTime startDate, DateTime endDate);

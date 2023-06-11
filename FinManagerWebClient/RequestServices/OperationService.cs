@@ -6,12 +6,12 @@ using FinManagerWebClient.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public class OperationRequests : IOperationRequests
+public class OperationService : IOperationService
 {
     private readonly HttpClient _httpClient;
     private readonly string _baseUrl;
 
-    public OperationRequests(IHttpClientFactory httpClientFactory)
+    public OperationService(IHttpClientFactory httpClientFactory)
     {
         IConfiguration config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())

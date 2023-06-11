@@ -1,7 +1,7 @@
 ﻿@page "/"
 @page "/transactions"
 @using FinManagerWebClient.Components.Transactions
-@inject ITransactionRequests transactionRequests
+@inject ITransactionService transactionService
 
 
 <PageTitle>Transactions</PageTitle>
@@ -38,6 +38,6 @@
 
     private async Task LoadTransactionsAsync()
     {
-        transactions = await transactionRequests.GetAsync();
+        transactions = await transactionService.GetAsync();
     }
 }

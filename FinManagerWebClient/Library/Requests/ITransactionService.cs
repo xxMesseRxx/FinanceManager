@@ -3,7 +3,7 @@
 using FinManagerWebClient.DTO.Transaction;
 using FinManagerWebClient.Model;
 
-public interface ITransactionRequests
+public interface ITransactionService
 {
     public Task<List<TransactionVM>> GetAsync();
     public Task<int> CreateAsync(TransactionCreateDto transactionCreateDto);

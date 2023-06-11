@@ -7,12 +7,12 @@ using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-public class TransactionRequests : ITransactionRequests
+public class TransactionService : ITransactionService
 {
     private readonly HttpClient _httpClient;
     private readonly string _baseUrl;
 
-    public TransactionRequests(IHttpClientFactory httpClientFactory)
+    public TransactionService(IHttpClientFactory httpClientFactory)
     {
         IConfiguration config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())

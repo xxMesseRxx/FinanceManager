@@ -1,4 +1,4 @@
-﻿@inject IOperationRequests operationRequests
+﻿@inject IOperationService operationService
 @inject IJSRuntime jsRuntime
 
 <div class="column">
@@ -36,7 +36,7 @@
     {
         try
         {
-            await operationRequests.RemoveAsync(o.Id);
+            await operationService.RemoveAsync(o.Id);
         }
         catch (InvalidOperationException ex)
         {

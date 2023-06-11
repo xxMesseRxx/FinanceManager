@@ -1,5 +1,5 @@
 ﻿@using FinManagerWebClient.DTO.Operation
-@inject IOperationRequests operationRequests
+@inject IOperationService operationService
 @inject IJSRuntime jsRuntime
 
 <div class="column">
@@ -49,7 +49,7 @@
 
         try
         {
-            await operationRequests.CreateAsync(operationCreateDto);
+            await operationService.CreateAsync(operationCreateDto);
         }
         catch (InvalidOperationException ex)
         {
@@ -71,7 +71,7 @@
 
         try
         {
-            await operationRequests.UpdateAsync(operationUpdateDto);      
+            await operationService.UpdateAsync(operationUpdateDto);      
         }
         catch (InvalidOperationException ex)
         {

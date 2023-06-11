@@ -7,9 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
-builder.Services.AddScoped<ITransactionRequests, TransactionRequests>();
-builder.Services.AddScoped<IOperationRequests, OperationRequests>();
-builder.Services.AddScoped<IReportsRequests, ReportsRequests>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IOperationService, OperationService>();
+builder.Services.AddScoped<IReportsService, ReportsService>();
 
 var app = builder.Build();
 

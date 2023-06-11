@@ -1,7 +1,7 @@
 ﻿@page "/operations"
 @using FinManagerWebClient.DTO.Operation
 @using FinManagerWebClient.Components.Operations
-@inject IOperationRequests operationRequests
+@inject IOperationService operationService
 @inject IJSRuntime jsRuntime
 
 <PageTitle>Operations</PageTitle>
@@ -35,6 +35,6 @@
 
     private async Task LoadOperationsAsync()
     {
-        operations = await operationRequests.GetAsync();
+        operations = await operationService.GetAsync();
     }
 }
