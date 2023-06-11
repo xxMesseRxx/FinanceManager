@@ -12,5 +12,5 @@ public interface ITransactionService
     public Task<List<TransactionViewModel>> GetWithOperIdAsync(int operationId);
 	public Task RemoveAsync(int id);
 	public Task EditAsync(TransactionUpdateDto transactionUpdateDto);
-	public Task AddAsync(TransactionCreateDto transactionCreateDto);
+	public Task<int> AddAsync(TransactionCreateDto transactionCreateDto);
 }

@@ -18,7 +18,7 @@ public class OperationService : IOperationService
 		_db = context;
 	}
 
-	public async Task AddAsync(OperationCreateDto operationCreateDto)
+	public async Task<int> AddAsync(OperationCreateDto operationCreateDto)
 	{
 		if (string.IsNullOrEmpty(operationCreateDto.Name))
 		{
@@ -31,6 +31,7 @@ public class OperationService : IOperationService
 		{
 			_db.Operations.Add(newOperation);
 			_db.SaveChanges();
+			return newOperation.Id;
 		}
 		catch (DbUpdateException)
 		{

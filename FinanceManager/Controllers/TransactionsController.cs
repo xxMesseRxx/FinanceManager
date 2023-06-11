@@ -41,9 +41,9 @@ public class TransactionsController : ControllerBase
     {
         try
         {
-            await _transactionService.AddAsync(transactionCreateDto);
+            int id = await _transactionService.AddAsync(transactionCreateDto);
 
-            return Ok();
+            return Ok(id);
         }
         catch (ArgumentException ex)
         {

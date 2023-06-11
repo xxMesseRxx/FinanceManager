@@ -10,5 +10,5 @@ public interface IOperationService
     public Task<OperationViewModel> GetAsync(string name);
     public Task RemoveAsync(int id);
 	public Task EditAsync(OperationUpdateDto operationUpdateDto);
-	public Task AddAsync(OperationCreateDto operationCreateDto);
+	public Task<int> AddAsync(OperationCreateDto operationCreateDto);
 }

@@ -40,7 +40,7 @@ public class TransactionRequests : ITransactionRequests
     {
         HttpResponseMessage response = await _httpClient.DeleteAsync($"{_baseUrl}/{id}");
 
-        CheckSuccessCode(response);
+        await CheckSuccessCode(response);
 
         return await response.Content.ReadFromJsonAsync<TransactionVM>();
     }
@@ -49,7 +49,7 @@ public class TransactionRequests : ITransactionRequests
     {
         HttpResponseMessage response = await _httpClient.PutAsJsonAsync<TransactionUpdateDto>(_baseUrl, transactionUpdateDto);
 
-        CheckSuccessCode(response);
+        await CheckSuccessCode(response);
 
         return await response.Content.ReadFromJsonAsync<TransactionVM>();
     }
