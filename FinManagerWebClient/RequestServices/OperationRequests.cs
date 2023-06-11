@@ -23,11 +23,13 @@ public class OperationRequests : IOperationRequests
         _httpClient = httpClientFactory.CreateClient();
     }
 
-    public async Task CreateAsync(OperationCreateDto operationCreateDto)
+    public async Task<int> CreateAsync(OperationCreateDto operationCreateDto)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync<OperationCreateDto>(_baseUrl, operationCreateDto);
 
         await CheckSuccessCode(response);
+
+        return await response.Content.ReadFromJsonAsync<int>();
     }
 
     public async Task<List<OperationVM>> GetAsync()

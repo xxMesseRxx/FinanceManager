@@ -24,11 +24,13 @@ public class TransactionRequests : ITransactionRequests
         _httpClient = httpClientFactory.CreateClient();
     }
 
-    public async Task CreateAsync(TransactionCreateDto transactionCreateDto)
+    public async Task<int> CreateAsync(TransactionCreateDto transactionCreateDto)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync<TransactionCreateDto>(_baseUrl, transactionCreateDto);
 
         await CheckSuccessCode(response);
+
+        return await response.Content.ReadFromJsonAsync<int>();
     }
 
     public async Task<List<TransactionVM>> GetAsync()
