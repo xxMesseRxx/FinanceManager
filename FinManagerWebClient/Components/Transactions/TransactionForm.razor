@@ -57,7 +57,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        operations = await operationService.GetAsync();
+        operations = await operationService.GetAllAsync();
         base.OnInitialized();
     }
 
@@ -93,7 +93,7 @@
         {
             await transactionService.CreateAsync(transactionCreateDto);
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
             await jsRuntime.InvokeVoidAsync("alert", ex.Message);
         }
@@ -118,7 +118,7 @@
         {
             await transactionService.UpdateAsync(transactionUpdateDto);
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
             await jsRuntime.InvokeVoidAsync("alert", ex.Message);
         }

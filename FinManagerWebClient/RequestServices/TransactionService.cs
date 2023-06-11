@@ -26,6 +26,8 @@ public class TransactionService : ITransactionService
 
     public async Task<int> CreateAsync(TransactionCreateDto transactionCreateDto)
     {
+        CheckDataForCreate(transactionCreateDto);
+
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync<TransactionCreateDto>(_baseUrl, transactionCreateDto);
 
         await CheckSuccessCode(response);
@@ -33,9 +35,18 @@ public class TransactionService : ITransactionService
         return await response.Content.ReadFromJsonAsync<int>();
     }
 
-    public async Task<List<TransactionVM>> GetAsync()
+    public async Task<List<TransactionVM>> GetAllAsync()
     {
         return await _httpClient.GetFromJsonAsync<List<TransactionVM>>(_baseUrl);
+    }
+
+    public async Task<TransactionVM> GetAsync(int id)
+    {
+        HttpResponseMessage response = await _httpClient.GetAsync($"{_baseUrl}/{id}");
+
+        await CheckSuccessCode(response);
+
+        return await response.Content.ReadFromJsonAsync<TransactionVM>();
     }
 
     public async Task<TransactionVM> RemoveAsync(int id)
@@ -49,6 +60,8 @@ public class TransactionService : ITransactionService
 
     public async Task<TransactionVM> UpdateAsync(TransactionUpdateDto transactionUpdateDto)
     {
+        CheckDataForUpdate(transactionUpdateDto);
+
         HttpResponseMessage response = await _httpClient.PutAsJsonAsync<TransactionUpdateDto>(_baseUrl, transactionUpdateDto);
 
         await CheckSuccessCode(response);
@@ -62,6 +75,52 @@ public class TransactionService : ITransactionService
         {
             string msg = await response.Content.ReadAsStringAsync();
             throw new InvalidOperationException(msg);
+        }
+    }
+
+    private void CheckDataForCreate(TransactionCreateDto transactionCreateDto)
+    {
+        if (transactionCreateDto is null)
+        {
+            throw new ArgumentNullException(nameof(transactionCreateDto));
+        }
+        else if (transactionCreateDto.Sum == 0)
+        {
+            throw new ArgumentNullException(nameof(transactionCreateDto.Sum));
+        }
+        else if (transactionCreateDto.OperationId == 0)
+        {
+            throw new ArgumentNullException(nameof(transactionCreateDto.OperationId));
+        }
+        else if (new DateTime(1900, 01, 01) >= transactionCreateDto.DateTime ||
+                 DateTime.Now <= transactionCreateDto.DateTime)
+        {
+            throw new ArgumentException("Date isn't valid");
+        }
+    }
+
+    private void CheckDataForUpdate(TransactionUpdateDto transactionUpdateDto)
+    {
+        if (transactionUpdateDto is null)
+        {
+            throw new ArgumentNullException(nameof(transactionUpdateDto));
+        }
+        else if (transactionUpdateDto.Id == 0)
+        {
+            throw new ArgumentNullException(nameof(transactionUpdateDto.Id));
+        }
+        else if (transactionUpdateDto.Sum == 0)
+        {
+            throw new ArgumentNullException(nameof(transactionUpdateDto.Sum));
+        }
+        else if (transactionUpdateDto.OperationId == 0)
+        {
+            throw new ArgumentNullException(nameof(transactionUpdateDto.OperationId));
+        }
+        else if (new DateTime(1900, 01, 01) >= transactionUpdateDto.DateTime ||
+                 DateTime.Now <= transactionUpdateDto.DateTime)
+        {
+            throw new ArgumentException("Date isn't valid");
         }
     }
 }

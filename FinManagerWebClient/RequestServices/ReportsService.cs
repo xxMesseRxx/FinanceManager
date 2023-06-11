@@ -31,8 +31,18 @@ public class ReportsService : IReportsService
 
     public async Task<PeriodReport> GetPeriodReportAsync(DateTime startDate, DateTime endDate)
     {
+        CheckDates(startDate, endDate);
+
         return await _httpClient.GetFromJsonAsync<PeriodReport>($"{_periodReportUrl}" + 
                                                                 $"?startDate={startDate.ToString("yyyy-MM-dd")}" +
                                                                 $"&endDate={endDate.ToString("yyyy-MM-dd")}");
+    }
+
+    private void CheckDates(DateTime startDate, DateTime endDate)
+    {
+        if (startDate > endDate)
+        {
+            throw new ArgumentException("Start date cannot be bigger than end date");
+        }
     }
 }

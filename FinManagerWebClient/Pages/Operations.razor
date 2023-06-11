@@ -8,7 +8,7 @@
 
 <OperationsTable Operations="@operations"
                  OperationWasRemovedCallback="@LoadOperationsAsync"
-                 EditingRowWasChosenCallback="@EditRow"/>
+                 EditingRowWasChosenCallback="@EditRowAsync"/>
 
 <OperationForm Operation="@operation"
                OperationsWereChangedCallback="@LoadOperationsAsync"
@@ -25,16 +25,21 @@
         base.OnInitialized();
     }
 
-    void EditRow(OperationVM o)
+    async Task EditRowAsync(int id)
     {
-        operation.Id = o.Id;
-        operation.Name = o.Name;
-
-        submitBtnText = "Сохранить";
+        try
+        {
+            operation = await operationService.GetAsync(id);
+            submitBtnText = "Сохранить";
+        }
+        catch (Exception ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }    
     }
 
     private async Task LoadOperationsAsync()
     {
-        operations = await operationService.GetAsync();
+        operations = await operationService.GetAllAsync();
     }
 }

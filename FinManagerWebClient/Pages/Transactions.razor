@@ -2,13 +2,13 @@
 @page "/transactions"
 @using FinManagerWebClient.Components.Transactions
 @inject ITransactionService transactionService
-
+@inject IJSRuntime jsRuntime
 
 <PageTitle>Transactions</PageTitle>
 
 <TransactionsTable Transactions="@transactions"
                    TransactionWasRemovedCallback="LoadTransactionsAsync"
-                   EditingRowWasChosenCallback="EditRow"/>
+                   EditingRowWasChosenCallback="EditRowAsync"/>
 
 <TransactionForm Transaction="@transaction"
                  TransactionsWereChangedCallback="@LoadTransactionsAsync"
@@ -25,19 +25,21 @@
         base.OnInitialized();
     }
 
-    void EditRow(TransactionVM t)
+    async Task EditRowAsync(int id)
     {
-        transaction.Id = t.Id;
-        transaction.Sum = t.Sum;
-        transaction.DateTime = t.DateTime;
-        transaction.Discription = t.Discription;
-        transaction.OperationId = t.OperationId;
-
-        submitBtnText = "Сохранить";
+        try
+        {
+            transaction = await transactionService.GetAsync(id);
+            submitBtnText = "Сохранить";
+        }
+        catch (Exception ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
     }
 
     private async Task LoadTransactionsAsync()
     {
-        transactions = await transactionService.GetAsync();
+        transactions = await transactionService.GetAllAsync();
     }
 }

@@ -19,7 +19,7 @@
                     <td>@t.DateTime.ToShortTimeString()</td>
                     <td>@t.Discription</td>
                     <td>
-                        <a @onclick="async () => await EditingRowWasChosenCallback.InvokeAsync(t)">Изменить</a>
+                        <a @onclick="async () => await EditingRowWasChosenCallback.InvokeAsync(t.Id)">Изменить</a>
                         <a @onclick="() => RemoveRow(t)">Удалить</a>
                     </td>
                 </tr>
@@ -34,7 +34,7 @@
     [Parameter]
     public EventCallback TransactionWasRemovedCallback { get; set; }
     [Parameter]
-    public EventCallback<TransactionVM> EditingRowWasChosenCallback { get; set; }
+    public EventCallback<int> EditingRowWasChosenCallback { get; set; }
 
     async Task RemoveRow(TransactionVM t)
     {
@@ -42,7 +42,7 @@
         {
             await transactionService.RemoveAsync(t.Id);
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
             await jsRuntime.InvokeVoidAsync("alert", ex.Message);
         }

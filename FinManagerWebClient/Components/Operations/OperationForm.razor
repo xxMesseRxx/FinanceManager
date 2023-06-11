@@ -51,7 +51,7 @@
         {
             await operationService.CreateAsync(operationCreateDto);
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
             await jsRuntime.InvokeVoidAsync("alert", ex.Message);
         }
@@ -73,7 +73,7 @@
         {
             await operationService.UpdateAsync(operationUpdateDto);      
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
             await jsRuntime.InvokeVoidAsync("alert", ex.Message);
         }

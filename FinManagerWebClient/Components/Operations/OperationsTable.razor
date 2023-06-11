@@ -15,7 +15,7 @@
                     <td>@o.Id</td>
                     <td>@o.Name</td>
                     <td>
-                        <a @onclick="async () => await EditingRowWasChosenCallback.InvokeAsync(o)">Изменить</a>
+                        <a @onclick="async () => await EditingRowWasChosenCallback.InvokeAsync(o.Id)">Изменить</a>
                         <a @onclick="() => RemoveRow(o)">Удалить</a>
                     </td>
                 </tr>
@@ -30,7 +30,7 @@
     [Parameter]
     public EventCallback OperationWasRemovedCallback { get; set; }
     [Parameter]
-    public EventCallback<OperationVM> EditingRowWasChosenCallback { get; set; }
+    public EventCallback<int> EditingRowWasChosenCallback { get; set; }
 
     async Task RemoveRow(OperationVM o)
     {
@@ -38,7 +38,7 @@
         {
             await operationService.RemoveAsync(o.Id);
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
             await jsRuntime.InvokeVoidAsync("alert", ex.Message);
         }

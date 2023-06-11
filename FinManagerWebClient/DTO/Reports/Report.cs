@@ -1,4 +1,4 @@
-﻿namespace FinManagerWebClient.Library;
+﻿namespace FinManagerWebClient.DTO.Reports;
 
 using FinManagerWebClient.Model;
 
