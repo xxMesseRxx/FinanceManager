@@ -41,9 +41,9 @@ public class OperationsController : ControllerBase
     {
         try
         {
-            await _operationService.AddAsync(operationCreateDto);
+            int id = await _operationService.AddAsync(operationCreateDto);
 
-            return Ok();
+            return Ok(id);
         }
         catch (ArgumentException ex)
         {

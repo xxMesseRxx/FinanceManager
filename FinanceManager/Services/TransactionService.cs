@@ -19,7 +19,7 @@ public class TransactionService : ITransactionService
 		_db = context;
 	}
 
-	public async Task AddAsync(TransactionCreateDto transactionCreateDto)
+	public async Task<int> AddAsync(TransactionCreateDto transactionCreateDto)
 	{
 		Transaction newTransaction = new Transaction()
 		{ 
@@ -33,6 +33,7 @@ public class TransactionService : ITransactionService
 		{
 			_db.Transactions.Add(newTransaction);
 			_db.SaveChanges();
+			return newTransaction.Id;
 		}
 		catch (DbUpdateException)
 		{

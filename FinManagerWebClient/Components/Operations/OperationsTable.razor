@@ -1,0 +1,48 @@
+﻿@inject IOperationService operationService
+@inject IJSRuntime jsRuntime
+
+<div class="column">
+    <table class="date-table">
+        <thead>
+            <tr>
+                <th>Id</th><th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var o in Operations)
+            {
+                <tr>
+                    <td>@o.Id</td>
+                    <td>@o.Name</td>
+                    <td>
+                        <a @onclick="async () => await EditingRowWasChosenCallback.InvokeAsync(o.Id)">Изменить</a>
+                        <a @onclick="() => RemoveRow(o)">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public List<OperationVM> Operations { get; set; } = new List<OperationVM>();
+    [Parameter]
+    public EventCallback OperationWasRemovedCallback { get; set; }
+    [Parameter]
+    public EventCallback<int> EditingRowWasChosenCallback { get; set; }
+
+    async Task RemoveRow(OperationVM o)
+    {
+        try
+        {
+            await operationService.RemoveAsync(o.Id);
+        }
+        catch (Exception ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+
+        await OperationWasRemovedCallback.InvokeAsync();
+    }
+}

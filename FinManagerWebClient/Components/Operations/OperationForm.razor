@@ -1,0 +1,94 @@
+﻿@using FinManagerWebClient.DTO.Operation
+@inject IOperationService operationService
+@inject IJSRuntime jsRuntime
+
+<div class="column">
+    <EditForm Model="Operation" OnSubmit="Submit">
+        <div>
+            <label>Id:</label><br />
+            <InputNumber @bind-Value="Operation.Id" tabindex="-1" readonly />
+        </div>
+        <div>
+            <label>Name:</label><br />
+            <InputText @bind-Value="Operation.Name" tabindex="-1" />
+        </div>
+        <div>
+            <button type="submit">@SubmitBtnText</button>
+            <button type="button" @onclick="ResetForm">Сбросить</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public OperationVM Operation { get; set; } = new OperationVM();
+    [Parameter]
+    public string SubmitBtnText { get; set; } = "Добавить";
+    [Parameter]
+    public EventCallback<string> SubmitBtnTextChanged { get; set; }
+    [Parameter]
+    public EventCallback OperationsWereChangedCallback { get; set; }
+
+    async Task Submit()
+    {
+        if (Operation.Id == 0)
+        {
+            await CreateAsync();
+            return;
+        }
+
+        await UpdateAsync();
+    }
+
+    private async Task CreateAsync()
+    {
+        OperationCreateDto operationCreateDto = new OperationCreateDto()
+        {
+            Name = Operation.Name
+        };
+
+        try
+        {
+            await operationService.CreateAsync(operationCreateDto);
+        }
+        catch (Exception ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+
+        await OperationsWereChangedCallback.InvokeAsync();
+
+        await ResetForm();    
+    }
+
+    private async Task UpdateAsync()
+    {
+        OperationUpdateDto operationUpdateDto = new OperationUpdateDto()
+        {
+            Id = Operation.Id,
+            Name = Operation.Name
+        };
+
+        try
+        {
+            await operationService.UpdateAsync(operationUpdateDto);      
+        }
+        catch (Exception ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+
+        await OperationsWereChangedCallback.InvokeAsync();
+
+        await ResetForm();
+    }
+
+    private async Task ResetForm()
+    {
+        Operation.Name = "";
+        Operation.Id = 0;
+
+        SubmitBtnText = "Добавить";
+        await SubmitBtnTextChanged.InvokeAsync(SubmitBtnText);
+    }
+}

@@ -1,0 +1,142 @@
+﻿@using FinManagerWebClient.DTO.Transaction
+@inject IOperationService operationService
+@inject ITransactionService transactionService
+@inject IJSRuntime jsRuntime
+
+<div class="column">
+    <EditForm Model="Transaction" OnSubmit="Submit">
+        <div>
+            <label>Id:</label><br />
+            <InputNumber @bind-Value="Transaction.Id" tabindex="-1" readonly />
+        </div>
+        <div>
+            <label>Operation name:</label><br />
+            <InputSelect @bind-Value="Transaction.OperationId">
+                <option value="0">...</option>
+                @foreach (var o in operations)
+                {
+                    <option value="@o.Id">@o.Name</option>
+                }
+            </InputSelect>
+        </div>
+        <div>
+            <label>Sum:</label><br />
+            <input type="number" step="0.01" @bind:get="Transaction.Sum/100" @bind:set="SetSum"/>
+        </div>
+        <div>
+            <label>Date:</label><br />
+            <InputDate @bind-Value="Transaction.DateTime" />
+        </div>
+        <div>
+            <label>Time:</label><br />
+            <input type="time" @bind-value="Transaction.DateTime" />
+        </div>
+        <div>
+            <label>Discription:</label><br />
+            <InputTextArea @bind-Value="Transaction.Discription" />
+        </div>
+        <div>
+            <button type="submit">@SubmitBtnText</button>
+            <button type="button" @onclick="ResetForm">Сбросить</button>
+        </div>
+    </EditForm>
+
+</div>
+
+@code {
+    List<OperationVM> operations = new List<OperationVM>();
+
+    [Parameter]
+    public TransactionVM Transaction { get; set; } = new TransactionVM();
+    [Parameter]
+    public string SubmitBtnText { get; set; } = "Добавить";
+    [Parameter]
+    public EventCallback<string> SubmitBtnTextChanged { get; set; }
+    [Parameter]
+    public EventCallback TransactionsWereChangedCallback { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        operations = await operationService.GetAllAsync();
+        base.OnInitialized();
+    }
+
+    void SetSum(double value)
+    {
+        value = Math.Round(value, 2, MidpointRounding.AwayFromZero);
+        Transaction.Sum = value * 100;
+
+    }
+
+    async Task Submit()
+    {
+        if (Transaction.Id == 0)
+        {
+            await CreateAsync();
+            return;
+        }
+
+        await UpdateAsync();
+    }
+
+    private async Task CreateAsync()
+    {
+        TransactionCreateDto transactionCreateDto = new TransactionCreateDto()
+        {
+            Sum = Convert.ToInt32(Transaction.Sum),
+            OperationId = Transaction.OperationId,
+            DateTime = Transaction.DateTime,
+            Discription = Transaction.Discription
+        };
+
+        try
+        {
+            await transactionService.CreateAsync(transactionCreateDto);
+        }
+        catch (Exception ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+
+        await TransactionsWereChangedCallback.InvokeAsync();
+
+        await ResetForm();
+    }
+
+    private async Task UpdateAsync()
+    {
+        TransactionUpdateDto transactionUpdateDto = new TransactionUpdateDto()
+        {
+            Id = Transaction.Id,
+            Sum = Convert.ToInt32(Transaction.Sum),
+            OperationId = Transaction.OperationId,
+            DateTime = Transaction.DateTime,
+            Discription = Transaction.Discription
+        };
+
+        try
+        {
+            await transactionService.UpdateAsync(transactionUpdateDto);
+        }
+        catch (Exception ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+
+        await TransactionsWereChangedCallback.InvokeAsync();
+
+        await ResetForm();
+    }
+
+    private async Task ResetForm()
+    {
+        Transaction.Id = 0;
+        Transaction.OperationId = 0;
+        Transaction.Sum = 0;
+        Transaction.DateTime = DateTime.Now;
+        Transaction.Discription = null;
+
+        SubmitBtnText = "Добавить";
+        await SubmitBtnTextChanged.InvokeAsync(SubmitBtnText);
+    }
+}

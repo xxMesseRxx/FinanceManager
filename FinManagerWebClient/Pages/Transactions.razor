@@ -1,0 +1,45 @@
+﻿@page "/"
+@page "/transactions"
+@using FinManagerWebClient.Components.Transactions
+@inject ITransactionService transactionService
+@inject IJSRuntime jsRuntime
+
+<PageTitle>Transactions</PageTitle>
+
+<TransactionsTable Transactions="@transactions"
+                   TransactionWasRemovedCallback="LoadTransactionsAsync"
+                   EditingRowWasChosenCallback="EditRowAsync"/>
+
+<TransactionForm Transaction="@transaction"
+                 TransactionsWereChangedCallback="@LoadTransactionsAsync"
+                 @bind-SubmitBtnText="submitBtnText"/>
+
+@code {
+    TransactionVM transaction = new TransactionVM() { DateTime = DateTime.Now };
+    List<TransactionVM> transactions = new List<TransactionVM>();
+    string submitBtnText = "Добавить";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTransactionsAsync();
+        base.OnInitialized();
+    }
+
+    async Task EditRowAsync(int id)
+    {
+        try
+        {
+            transaction = await transactionService.GetAsync(id);
+            submitBtnText = "Сохранить";
+        }
+        catch (Exception ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+    }
+
+    private async Task LoadTransactionsAsync()
+    {
+        transactions = await transactionService.GetAllAsync();
+    }
+}

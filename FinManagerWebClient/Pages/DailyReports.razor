@@ -1,0 +1,65 @@
+﻿@page "/dailyReports"
+@using FinManagerWebClient.DTO.Reports
+@inject IReportsService reportsService
+
+<div class="column">
+    <div>
+        <div>
+            <label>Select date: </label>
+            <InputDate @bind-Value="dailyReport.Date" @onblur="LoadDailyReportAsync"/>
+        </div>
+        <div>
+            <p>
+                Total income: <output class="income">@(string.Format("{0:F}", dailyReport.TotalIncome / 100))</output>
+                | Total expenses: <output class="expenses">@(string.Format("{0:F}", dailyReport.TotalExpenses / 100))</output>
+            </p>
+        </div>
+    </div>
+
+    <div>
+        <table class="date-table">
+            <thead>
+                <tr>
+                    <th>Id</th><th>Operation name</th><th>Sum</th><th>Date</th><th>Time</th><th>Discription</th><th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var t in dailyReport.TransactionsVM)
+                {
+                    <tr>
+                        <td>@t.Id</td>
+                        <td>@t.OperationVM.Name</td>
+                        <td>@(string.Format("{0:F}", t.Sum / 100))</td>
+                        <td>@t.DateTime.ToShortDateString()</td>
+                        <td>@t.DateTime.ToShortTimeString()</td>
+                        <td>@t.Discription</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@code {
+    DailyReport dailyReport = new DailyReport()
+    {
+            TransactionsVM = new List<TransactionVM>(),
+            Date = DateTime.Now
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDailyReportAsync();
+        base.OnInitialized();
+    }
+
+    private async Task LoadDailyReportAsync()
+    {
+        if (new DateTime(1900, 01, 01) <= dailyReport.Date &&
+            DateTime.Now >= dailyReport.Date)
+        {
+            dailyReport = await reportsService.GetDailyReportAsync(dailyReport.Date);
+        }
+    }
+}

@@ -1,0 +1,52 @@
+﻿@inject ITransactionService transactionService
+@inject IJSRuntime jsRuntime
+
+<div class="column">
+    <table class="date-table">
+        <thead>
+            <tr>
+                <th>Id</th><th>Operation name</th><th>Sum</th><th>Date</th><th>Time</th><th>Discription</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Transactions)
+            {
+                <tr>
+                    <td>@t.Id</td>
+                    <td>@t.OperationVM.Name</td>
+                    <td>@(string.Format("{0:F}", t.Sum / 100))</td>
+                    <td>@t.DateTime.ToShortDateString()</td>
+                    <td>@t.DateTime.ToShortTimeString()</td>
+                    <td>@t.Discription</td>
+                    <td>
+                        <a @onclick="async () => await EditingRowWasChosenCallback.InvokeAsync(t.Id)">Изменить</a>
+                        <a @onclick="() => RemoveRow(t)">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public List<TransactionVM> Transactions { get; set; } = new List<TransactionVM>();
+    [Parameter]
+    public EventCallback TransactionWasRemovedCallback { get; set; }
+    [Parameter]
+    public EventCallback<int> EditingRowWasChosenCallback { get; set; }
+
+    async Task RemoveRow(TransactionVM t)
+    {
+        try
+        {
+            await transactionService.RemoveAsync(t.Id);
+        }
+        catch (Exception ex)
+        {
+            await jsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+
+        await TransactionWasRemovedCallback.InvokeAsync();
+    }
+}
